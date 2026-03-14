@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Leetcode_solutions;
+using System.Text;
 
 
 string[] strs = [""];
@@ -11,8 +12,29 @@ Solution s = new();
 //    Console.WriteLine(i);
 //}
 //Console.WriteLine(s.RemoveElement(nums,3));
-string paran = "([}}])";
-Console.WriteLine(s.IsValid(paran));
+//string paran = "([}}])";
+//Console.WriteLine(s.IsValid(paran));
+
+//int[] nums1 = new int[] { 3, 1, 3, 4, 2 };
+//Console.WriteLine(s.FindDuplicate(nums1));
+ListNode l1 = new ListNode();
+l1.val = 5;
+ListNode l2 = new ListNode();
+l1.val = 2;
+ListNode l3 = new ListNode();
+l1.val = 13;
+ListNode l4 = new ListNode();
+l1.val = 3;
+ListNode l5 = new ListNode();
+l1.val = 8;
+l1.next = l2;
+l2.next = l3;
+l3.next = l4;
+l4.next = l5;
+ListNode head = new();
+head.next = l1;
+ListNode ans = s.RemoveNodes(head);
+Console.WriteLine(ans.next);
 
 public class Solution
 {
@@ -157,5 +179,47 @@ public class Solution
             return true;
         }
         else { return false; }
+    }
+
+    public int FindDuplicate(int[] nums)
+    {
+        int slow = nums[0]; int fast = nums[0];
+        do
+        {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+
+        slow = nums[0];
+
+        while (slow != fast)
+        {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+
+        return slow;
+    }
+
+    public ListNode RemoveNodes(ListNode head)
+    {
+        ListNode curr = head;
+        ListNode prev = null;
+        while (curr != null)
+        {
+            if ((curr.next).val > curr.val)
+            {
+                ListNode temp = curr.next;
+                prev.next = curr.next;
+                curr.next = null;
+                curr = temp;
+            }
+            else
+            {
+                prev = curr;
+                curr = curr.next;
+            }
+        }
+        return prev;
     }
 }

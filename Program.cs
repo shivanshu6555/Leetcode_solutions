@@ -1,9 +1,10 @@
 ﻿using Leetcode_solutions;
+using System.Globalization;
 using System.Text;
 
 
 string[] strs = [""];
-int[] nums = new int[] {2};
+int[] nums = new int[] { 1, 1, 1, 2, 2, 2, 3, 3, 3 };
 Solution s = new();
 //s.GroupAnagrams(strs);
 //s.TopKFrequent([1,1,1,1,1,1,1,1,1,1,2,2,3,3]);
@@ -17,24 +18,26 @@ Solution s = new();
 
 //int[] nums1 = new int[] { 3, 1, 3, 4, 2 };
 //Console.WriteLine(s.FindDuplicate(nums1));
-ListNode l1 = new ListNode();
-l1.val = 5;
-ListNode l2 = new ListNode();
-l1.val = 2;
-ListNode l3 = new ListNode();
-l1.val = 13;
-ListNode l4 = new ListNode();
-l1.val = 3;
-ListNode l5 = new ListNode();
-l1.val = 8;
-l1.next = l2;
-l2.next = l3;
-l3.next = l4;
-l4.next = l5;
-ListNode head = new();
-head.next = l1;
-ListNode ans = s.RemoveNodes(head);
-Console.WriteLine(ans.next);
+//ListNode l1 = new ListNode();
+//l1.val = 5;
+//ListNode l2 = new ListNode();
+//l1.val = 2;
+//ListNode l3 = new ListNode();
+//l1.val = 13;
+//ListNode l4 = new ListNode();
+//l1.val = 3;
+//ListNode l5 = new ListNode();
+//l1.val = 8;
+//l1.next = l2;
+//l2.next = l3;
+//l3.next = l4;
+//l4.next = l5;
+//ListNode head = new();
+//head.next = l1;
+//ListNode ans = s.RemoveNodes(head);
+//Console.WriteLine(ans.next);
+
+s.TopKFrequent(nums, 3);
 
 public class Solution
 {
@@ -221,5 +224,39 @@ public class Solution
             }
         }
         return prev;
+    }
+
+    //public string ReverseString(string s)
+    //{
+    //    int i = 0; int j = s.Length - 1;
+    //    while(i < j)
+    //    {
+    //        (s[i], s[j]) = (s[j], s[i]);
+    //    }
+    //}
+
+    public int[] TopKFrequent(int[] nums, int k)
+    {
+        Dictionary<int, int> FreqCount = new();
+        foreach (int i in nums)
+        {
+            if (FreqCount.ContainsKey(i)) { FreqCount[i]++; }
+            else { FreqCount[i] = 1; }
+        }
+        PriorityQueue<int, int> minheap = new();
+        foreach (var freq in FreqCount)
+        {
+            minheap.Enqueue(freq.Key, freq.Value);
+            if (minheap.Count > k)
+            { minheap.Dequeue(); }
+        }
+        int[] results = new int[minheap.Count];
+        for (int i = 0; i < k; i++)
+        {
+            results[i] = minheap.Dequeue();
+        }
+
+        return results;
+
     }
 }

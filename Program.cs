@@ -37,7 +37,22 @@ Solution s = new();
 //ListNode ans = s.RemoveNodes(head);
 //Console.WriteLine(ans.next);
 
-s.TopKFrequent(nums, 3);
+//s.TopKFrequent(nums, 3);
+//foreach(int i in s.TopKFrequent(nums, 3))
+//{
+//    Console.WriteLine(i);
+//}
+
+//Console.WriteLine(s.ReverseString("shivanshu"));
+//Recursion rec = new();
+//Console.WriteLine(rec.Sumofnumbers(10));
+
+//foreach (int i in s.Fibonacci(6))
+//{
+//    Console.WriteLine(i) ;
+//}
+
+Console.WriteLine(s.Fibonacci(6));
 
 public class Solution
 {
@@ -226,14 +241,17 @@ public class Solution
         return prev;
     }
 
-    //public string ReverseString(string s)
-    //{
-    //    int i = 0; int j = s.Length - 1;
-    //    while(i < j)
-    //    {
-    //        (s[i], s[j]) = (s[j], s[i]);
-    //    }
-    //}
+    public string ReverseString(string s)
+    {
+        StringBuilder s1 = new(s);
+        int i = 0; int j = s1.Length - 1;
+        while (i != j)
+        {
+            (s1[i], s1[j]) = (s1[j], s1[i]);
+            i++; j--;
+        }
+        return s1.ToString();
+    }
 
     public int[] TopKFrequent(int[] nums, int k)
     {
@@ -250,7 +268,7 @@ public class Solution
             if (minheap.Count > k)
             { minheap.Dequeue(); }
         }
-        int[] results = new int[minheap.Count];
+        int[] results = new int[k];
         for (int i = 0; i < k; i++)
         {
             results[i] = minheap.Dequeue();
@@ -258,5 +276,18 @@ public class Solution
 
         return results;
 
+    }
+
+    public int Fibonacci(int n)
+    {
+        int sum = 0;
+        int[] arr = new int[n+1];
+            arr[0] = 0; arr[1] = 1;
+        for(int i =2; i<=n; i++)
+        {
+            arr[i] = arr[i - 1] + arr[i - 2]; 
+        }
+
+        return arr[n];
     }
 }

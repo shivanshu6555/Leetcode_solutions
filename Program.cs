@@ -4,8 +4,10 @@ using System.Text;
 
 
 string[] strs = [""];
-int[] nums = new int[] { 1, 1, 1, 2, 2, 2, 3, 3, 3 };
-Solution s = new();
+int[] nums = new int[] {1,2,3,4,5};
+
+
+
 //s.GroupAnagrams(strs);
 //s.TopKFrequent([1,1,1,1,1,1,1,1,1,1,2,2,3,3]);
 //foreach(int i in s.RemoveDuplicates(nums))
@@ -52,7 +54,12 @@ Solution s = new();
 //    Console.WriteLine(i) ;
 //}
 
-Console.WriteLine(s.Fibonacci(6));
+//Console.WriteLine(s.Fibonacci(6));
+
+Solution s = new();
+//Console.WriteLine(s.IsSorted(nums, nums.Length));
+
+Console.WriteLine(s.Search(nums,2));
 
 public class Solution
 {
@@ -62,7 +69,7 @@ public class Solution
         if (strs.Length == 0 || strs.Length == 1) { return new List<IList<string>>(); }
 
         Dictionary<string, IList<string>> anagrams = new();
-        foreach(var word in strs)
+        foreach (var word in strs)
         {
 
             int[] charcount = new int[26];
@@ -72,7 +79,7 @@ public class Solution
             }
 
             StringBuilder sb = new();
-            for(int i = 0; i < 26; i++){
+            for (int i = 0; i < 26; i++) {
                 sb.Append(charcount[i]);
             }
 
@@ -83,7 +90,7 @@ public class Solution
             }
             anagrams[key].Add(word);
         }
-        
+
 
         return new List<IList<string>>(anagrams.Values);
     }
@@ -97,7 +104,7 @@ public class Solution
             else { count[i]++; }
         }
 
-        foreach(var i in count)
+        foreach (var i in count)
         {
             Console.WriteLine($"key{i.Key} , {i.Value}");
         }
@@ -137,18 +144,18 @@ public class Solution
                 j++;
             }
         }
-        return nums[0..(i+1)];
+        return nums[0..(i + 1)];
     }
 
     public int RemoveElement(int[] nums, int val)
     {
         int i = 0;
-        
+
         for (int k = 0; k < nums.Length; k++)
         {
             if (nums[k] == val) { i = k; break; }
         }
-        int j = i+1;
+        int j = i + 1;
         while (j < nums.Length)
         {
             if (nums[j] != val)
@@ -281,13 +288,40 @@ public class Solution
     public int Fibonacci(int n)
     {
         int sum = 0;
-        int[] arr = new int[n+1];
-            arr[0] = 0; arr[1] = 1;
-        for(int i =2; i<=n; i++)
+        int[] arr = new int[n + 1];
+        arr[0] = 0; arr[1] = 1;
+        for (int i = 2; i <= n; i++)
         {
-            arr[i] = arr[i - 1] + arr[i - 2]; 
+            arr[i] = arr[i - 1] + arr[i - 2];
         }
 
         return arr[n];
+    }
+
+    //IsSorted array using recursion
+    public bool IsSorted(int[] arr, int n)
+    {
+        if (n == 0 || n == 1 ) { return true; }
+
+        return (arr[n - 1] > arr[n - 2] && IsSorted(arr, n - 1));
+    }
+
+    public int Search(int[] nums, int target)
+    {
+        int start = 0; int end = nums.Length - 1;
+        while (start < end)
+        {
+            int mid = start + ((end - start) / 2);
+            if (nums[mid] == target) { return mid; }
+            else if (nums[mid] > target)
+            {
+                end = mid;
+            }
+            else
+            {
+                start = mid;
+            }
+        }
+        return -1;
     }
 }

@@ -4,7 +4,8 @@ using System.Text;
 
 
 string[] strs = [""];
-int[] nums = new int[] {1,2,3,4,5};
+int[] nums1 = new int[] {1,2};
+int[] nums2 = new int[] {3,4};
 
 
 
@@ -57,10 +58,16 @@ int[] nums = new int[] {1,2,3,4,5};
 //Console.WriteLine(s.Fibonacci(6));
 
 Solution s = new();
-//Console.WriteLine(s.IsSorted(nums, nums.Length));
+////Console.WriteLine(s.IsSorted(nums, nums.Length));
 
-Console.WriteLine(s.Search(nums,2));
+//Console.WriteLine(s.Search(nums1,2));
 
+//foreach(int i in s.ProductExceptSelf(nums1))
+//{
+//    Console.WriteLine(i) ;
+//}
+
+Console.WriteLine(s.FindMedianSortedArraysBetter(nums1,nums2));
 public class Solution
 {
     public IList<IList<string>> GroupAnagrams(string[] strs)
@@ -323,5 +330,125 @@ public class Solution
             }
         }
         return -1;
+    }
+
+    public int[] ProductExceptSelf(int[] nums)
+    {
+        int[] ans = new int[nums.Length];
+        int[] prefix = new int[nums.Length];
+        Array.Fill(prefix, 1);
+        int[] suffix = new int[nums.Length];
+        Array.Fill(suffix, 1);
+        for (int i = 1; i < nums.Length; i++)
+        {
+            suffix[i] = suffix[i - 1] * nums[i - 1];
+        }
+
+        for (int i = nums.Length - 2; i >= 0; i--)
+        {
+            prefix[i] = prefix[i + 1] * nums[i + 1];
+        }
+
+        for (int i = 0; i < nums.Length; i++)
+        {
+            ans[i] = prefix[i] * suffix[i];
+        }
+
+        return ans;
+    }
+
+    public double FindMedianSortedArrays(int[] nums1, int[] nums2)
+    {
+        int i = 0; int j = 0;
+        int m = nums1.Length;
+        int n = nums2.Length;
+        List<int> ans = new();
+        while (i < m && j < n)
+        {
+            if (nums1[i] < nums2[j])
+            {
+                ans.Add(nums1[i]);
+                i++;
+            }
+            else
+            {
+                ans.Add(nums2[j]);
+                j++;
+            }
+        }
+        while (i < m)
+        {
+            ans.Add(nums1[i]);
+            i++;
+        }
+        while (j < n)
+        {
+            ans.Add(nums2[j]);
+            j++;
+        }
+        int total = m + n;
+        if (ans.Count % 2 == 0)
+        {
+            return (ans[total / 2] + ans[(total / 2) - 1]) / 2.0;
+        }
+        else
+        {
+            return ans[total / 2];
+        }
+    }
+
+    public double FindMedianSortedArraysBetter(int[] nums1, int[] nums2)
+    {
+        int i = 0; int j = 0;
+        int m = nums1.Length;
+        int n = nums2.Length;
+        int count = 0;
+        int indx1 = (m + n) / 2 - 1;
+        int indx2 = (m+n) / 2;
+        int indx1elem = int.MinValue;
+        int indx2elem = int.MinValue;
+        while(i < m && j < n)
+        {
+            if (nums1[i] < nums2[j])
+            {
+                if (count == indx1) indx1elem = nums1[i]; 
+                if (count == indx2) indx2elem = nums1[i];
+                count++;
+                i++;
+            }
+            else
+            {
+                if (count == indx1) indx1elem = nums2[j];
+                if (count == indx2) indx2elem = nums2[j];
+                count++;
+                j++;
+            }
+        }
+
+        while(i < m)
+        {
+            if (count == indx1) indx1elem = nums1[i];
+            if (count == indx2) indx2elem = nums1[i];
+            count++;
+            i++;
+        }
+
+        while (j < n)
+        {
+            if (count == indx1) indx1elem = nums2[j];
+            if (count == indx2) indx2elem = nums2[j];
+            count++;
+            j++;
+        }
+
+        int total = m + n;
+        if (total % 2 == 0)
+        {
+            return (indx1elem + indx2elem) / 2.0; 
+        }
+        else
+        {
+            return indx2elem;
+        }
     }
 }

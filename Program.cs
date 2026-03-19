@@ -4,8 +4,8 @@ using System.Text;
 
 
 string[] strs = [""];
-int[] nums1 = new int[] {1,2};
-int[] nums2 = new int[] {3,4};
+int[] nums1 = new int[] {1,3};
+int[] nums2 = new int[] {2};
 
 
 
@@ -67,7 +67,7 @@ Solution s = new();
 //    Console.WriteLine(i) ;
 //}
 
-Console.WriteLine(s.FindMedianSortedArraysBetter(nums1,nums2));
+Console.WriteLine(s.FindMedianSortedArraysOptimized(nums1,nums2));
 public class Solution
 {
     public IList<IList<string>> GroupAnagrams(string[] strs)
@@ -450,5 +450,34 @@ public class Solution
         {
             return indx2elem;
         }
+    }
+
+    public double FindMedianSortedArraysOptimized(int[] nums1, int[] nums2)
+    {
+        int n1 = nums1.Length;
+        int n2 = nums2.Length;
+        if (n1 > n2) { return FindMedianSortedArraysOptimized(nums2, nums1); }
+        int left = (n1 + n2 + 1) / 2;
+        int low = 0; int high = n1;
+
+        while (low <= high)
+        {
+            int mid1 = (low + high) / 2;
+            int mid2 = left - mid1;
+            int r1 = int.MaxValue; int r2 = int.MaxValue;
+            int l1 = int.MinValue; int l2 = int.MinValue;
+            if (mid1 < n1) { r1 = nums1[mid1]; }
+            if (mid2 < n2) { r2 = nums2[mid2]; }
+            if (mid1 - 1 >= 0) { l1 = nums1[mid1 - 1]; }
+            if (mid2 - 1 >= 0) { l2 = nums2[mid2 - 1]; }
+            if (l1 <= r2 && l2 <= r1)
+            {
+                if ((n1 + n2) % 2 == 1) { return Math.Max(l1, l2); }
+                else { return (Math.Max(l1, l2) + Math.Min(r1, r2)) / 2.0; }
+            }
+            if (l1 > r2) { high = mid1 - 1; }
+            else { low = mid1 + 1; }
+        }
+        return 0.0;
     }
 }

@@ -67,7 +67,20 @@ Solution s = new();
 //    Console.WriteLine(i) ;
 //}
 
-Console.WriteLine(s.FindMedianSortedArraysOptimized(nums1,nums2));
+Recursion rec = new();
+//rec.PrintName(5);
+//rec.PrintLinearly(1, 5);
+//rec.PrintDec(1, 5);
+//Console.WriteLine(rec.Sum(3));
+//Console.WriteLine(s.FindMedianSortedArraysOptimized(nums1,nums2));
+int[] nums = new int[] { 1, 2, 3, 4, 5 };
+//foreach(int i in (rec.Reverse(nums, 0, nums.Length - 1))){
+//    Console.WriteLine(i);
+//}
+
+//rec.reverse(nums, nums.Length);
+
+Console.WriteLine(rec.Fib(4));
 public class Solution
 {
     public IList<IList<string>> GroupAnagrams(string[] strs)

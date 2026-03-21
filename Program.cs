@@ -80,7 +80,8 @@ int[] nums = new int[] { 1, 2, 3, 4, 5 };
 
 //rec.reverse(nums, nums.Length);
 
-Console.WriteLine(rec.Fib(4));
+
+Console.WriteLine(rec.IsPalindrome("0P"));
 public class Solution
 {
     public IList<IList<string>> GroupAnagrams(string[] strs)

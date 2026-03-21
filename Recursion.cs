@@ -82,6 +82,26 @@ namespace Leetcode_solutions
             return Fib(n - 1) + Fib(n - 2);
         }
 
+        public StringBuilder Reverse(StringBuilder s, int i, int n)
+        {
+            if (i >= n / 2) { return s; }
+            (s[i], s[n - i - 1]) = (s[n - i - 1], s[i]);
+            return Reverse(s, i + 1, n);
+        }
+        public bool IsPalindrome(string s)
+        {
+            int i = 0; 
+            string result = new string(s.Where(c => char.IsLetter(c) || char.IsNumber(c)).ToArray()).ToLower();
+            StringBuilder s1 = new StringBuilder(result);
+            int n = s1.Length;
+            string reverse = (Reverse(s1, i, n)).ToString();
+            if (result == reverse)
+            {
+                return true;
+            }
+            else { return false; }
+        }
+
 
     }
 }

@@ -60,6 +60,8 @@ namespace Leetcode_solutions
             (arr[l], arr[r]) = (arr[r], arr[l]);
             return Reverse(arr, l + 1, r - 1);
         }
+
+        //reverse witohout using left and right pointer
         public void reversearray(int[] arr, int n, int i)
         {
             if (i >= n / 2) { return; }
@@ -76,12 +78,15 @@ namespace Leetcode_solutions
             }
         }
 
+        //fibonacci using recursion
         public int Fib(int n)
         {
             if (n == 0 || n == 1) { return n; }
             return Fib(n - 1) + Fib(n - 2);
         }
 
+
+        //finding palindrome using reversing from recursion
         public StringBuilder Reverse(StringBuilder s, int i, int n)
         {
             if (i >= n / 2) { return s; }
@@ -101,6 +106,53 @@ namespace Leetcode_solutions
             }
             else { return false; }
         }
+
+        //subsequence using recursion 
+        public List<List<int>> FindSubsequence(int[] arr)
+        {
+            int n = arr.Length;
+            List<List<int>> allSubsequences = new();
+            List<int> result = new();
+            Subswquencewithrec(arr, result, allSubsequences, n, 0);
+            return allSubsequences;
+        }
+
+        public void Subswquencewithrec(int[] arr, List<int> result, List<List<int>> allsubs, int n, int i)
+        {
+            if(i >= n) { allsubs.Add(new List<int>(result)); return; }
+            result.Add(arr[i]);
+            Subswquencewithrec(arr, result,allsubs ,n, i + 1);
+            result.Remove(arr[i]);
+            Subswquencewithrec(arr, result,allsubs ,n, i + 1);
+        }
+
+        //subsequence sum = k using recursion
+        public List<List<int>> SumofSubsequence(int[] arr, int k)
+        {
+            List<List<int>> result = new();
+            List<int> cal = new();
+            findsubsequencewithsum(arr, result, cal, arr.Length, 0, 0, k);
+            return result;
+        }
+
+        public void findsubsequencewithsum(int[] arr, List<List<int>> result, List<int> cal, int n,int i, int sum, int k)
+        {
+            if (i == n)
+            {
+                if (sum == k)
+                {
+                    result.Add(new List<int>(cal));
+                }
+                return;
+            }
+            cal.Add(arr[i]);
+            sum += arr[i];
+            findsubsequencewithsum(arr, result, cal, n, i + 1,sum, k);
+            cal.Remove(arr[i]);
+            sum -= arr[i];
+            findsubsequencewithsum(arr, result, cal, n, i + 1, sum, k);
+        }
+
 
 
     }

@@ -73,7 +73,8 @@ Recursion rec = new();
 //rec.PrintDec(1, 5);
 //Console.WriteLine(rec.Sum(3));
 //Console.WriteLine(s.FindMedianSortedArraysOptimized(nums1,nums2));
-int[] nums = new int[] { 1, 2, 3, 4, 5 };
+int[] nums = new int[] {1,4,8,13 };
+
 //foreach(int i in (rec.Reverse(nums, 0, nums.Length - 1))){
 //    Console.WriteLine(i);
 //}
@@ -81,9 +82,42 @@ int[] nums = new int[] { 1, 2, 3, 4, 5 };
 //rec.reverse(nums, nums.Length);
 
 
-Console.WriteLine(rec.IsPalindrome("0P"));
+//Console.WriteLine(rec.IsPalindrome("0P"));
+
+//rec.FindSubsequence([3, 1, 2]);
+//Console.WriteLine(rec.SumofSubsequence([1,2,1], 2));
+
+//foreach(List<int> i in (rec.SumofSubsequence([1, 2, 1], 2))){
+//    foreach(int j in i)
+//    {
+//        Console.WriteLine(j);
+//    }
+//}
+Console.WriteLine(s.MaxFrequency(nums,5));
 public class Solution
 {
+
+    //1838. Frequency of the Most Frequent Element
+    public int MaxFrequency(int[] nums,int k)
+    {
+        Array.Sort(nums);
+        int MaxFreq = 0;
+        long Currsum = 0;
+        int left = 0;
+        for(int right = 0; right < nums.Length; right++)
+        {
+            Currsum += nums[right];
+            while(((right - left + 1) * (long)nums[right]) - Currsum > k)
+            {
+                Currsum -= nums[left];
+                left++;
+            }
+            MaxFreq = Math.Max(MaxFreq, right - left + 1);
+        }
+
+        return MaxFreq;
+    }
+
     public IList<IList<string>> GroupAnagrams(string[] strs)
     {
         //edge cases

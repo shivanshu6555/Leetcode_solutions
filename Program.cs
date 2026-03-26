@@ -1,5 +1,6 @@
 ﻿using Leetcode_solutions;
 using System.Globalization;
+using System.Security.AccessControl;
 using System.Text;
 
 
@@ -73,8 +74,11 @@ Recursion rec = new();
 //rec.PrintDec(1, 5);
 //Console.WriteLine(rec.Sum(3));
 //Console.WriteLine(s.FindMedianSortedArraysOptimized(nums1,nums2));
-int[] nums = new int[] { -1, 0, 1, 2, -1, -4 };
-Console.WriteLine(s.ThreeSum(nums));
+//int[] nums = new int[] { -1, 0, 1, 2, -1, -4 };
+//Console.WriteLine(s.ThreeSum(nums));
+
+//Console.WriteLine(s.Trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]));
+
 //foreach(int i in (rec.Reverse(nums, 0, nums.Length - 1))){
 //    Console.WriteLine(i);
 //}
@@ -93,9 +97,62 @@ Console.WriteLine(s.ThreeSum(nums));
 //        Console.WriteLine(j);
 //    }
 //}
-Console.WriteLine(s.MaxFrequency(nums,5));
+//Console.WriteLine(s.MaxFrequency(nums,5));
+
+Console.WriteLine(s.LengthOfLongestSubstring("abcabcbb"));
 public class Solution
 {
+
+    //3. Longest Substring Without Repeating Characters
+    public int LengthOfLongestSubstring(string s)
+    {
+        int n = s.Length;
+        string result = "";
+        //StringBuilder s1 = new(s);
+        int left = 0;
+        if(s.Length <= 1) { return s.Length; }
+        int right = 1;
+        while(right < n)
+        {
+            if (s[left] == s[right] || s[right] == s[right - 1])
+            {
+                left = right;
+                right = left + 1;
+            }
+            else
+            {
+                result = s[left..(right + 1)];
+                right++;
+            }
+        }
+        return result.Length;
+    }
+    //42. trapping rain water
+    public int Trap(int[] height)
+    {
+        int[] left_max = new int[height.Length];
+        int[] right_max = new int[height.Length];
+        left_max[0] = 0;
+        right_max[right_max.Length - 1] = 0;
+        for(int i=1; i < height.Length; i++)
+        {
+            left_max[i] = Math.Max(left_max[i - 1], height[i-1]);
+        }
+        for (int i = height.Length - 2; i >= 0; i--)
+        {
+            right_max[i] = Math.Max(right_max[i + 1], height[i+1]);
+        }
+        int sum = 0;
+        for(int i = 0;i < height.Length; i++)
+        {
+            if(Math.Min(left_max[i], right_max[i]) - height[i] > 0)
+            {
+                sum += Math.Min(left_max[i], right_max[i]) - height[i];
+
+            }
+        }
+        return sum;
+    }
 
     //3 sum
     public IList<IList<int>> ThreeSum(int[] nums)

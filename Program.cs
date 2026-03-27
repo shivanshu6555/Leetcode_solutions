@@ -1,4 +1,5 @@
 ﻿using Leetcode_solutions;
+using NPOI.SS.Formula.Functions;
 using System.Globalization;
 using System.Security.AccessControl;
 using System.Text;
@@ -99,34 +100,87 @@ Recursion rec = new();
 //}
 //Console.WriteLine(s.MaxFrequency(nums,5));
 
-Console.WriteLine(s.LengthOfLongestSubstring("abcabcbb"));
+Console.WriteLine(s.MinSubArrayLen(7,[2, 3, 1, 2, 4, 3]));
 public class Solution
 {
+    //209. Minimum Size Subarray Sum
+    public int MinSubArrayLen(int target, int[] nums)
+    {
+        int n = nums.Length;
+        if(n <= 1) { return n; }
+        int left = 0; int right = 0;
+        int curr = 0; int min = int.MaxValue; int sum = 0;
+        while (right < n)
+        {
+            sum += nums[right];
+            if (sum >= target && left < n )
+            {
+                curr = right - left + 1;
+                min = Math.Min(min, curr);
+                sum = sum - nums[left];
+                left++;
+            }
+            else
+            {
+                right++;
+            }
+        }
+        return min == int.MaxValue ? 0 : min;
+    }
 
     //3. Longest Substring Without Repeating Characters
     public int LengthOfLongestSubstring(string s)
     {
-        int n = s.Length;
-        string result = "";
-        //StringBuilder s1 = new(s);
-        int left = 0;
-        if(s.Length <= 1) { return s.Length; }
-        int right = 1;
-        while(right < n)
+        Dictionary<char, int> Count = new();
+        int left = 0;int right = 0;
+        int curr = 0;int max = 0;
+        while (right < s.Length)
         {
-            if (s[left] == s[right] || s[right] == s[right - 1])
+            if (Count.ContainsKey(s[right]))
             {
-                left = right;
-                right = left + 1;
+                if (Count[s[right]] >= left)
+                {
+                    left = Count[s[right]] + 1;
+                }
+                Count[s[right]] = right;
             }
             else
             {
-                result = s[left..(right + 1)];
-                right++;
+                Count.Add(s[right], right);   
             }
+            curr = right - left + 1;
+            max = Math.Max(max, curr);
+            right++;
+
         }
-        return result.Length;
+        return max;
     }
+
+    //3. Longest Substring Without Repeating Characters with constant space complexity
+    public int LengthOfLongestSubstringOptimized(string s)
+    {
+        int n = s.Length;
+        if (n <= 1) { return n; }
+
+        Span<int> Count = stackalloc int[128];
+        int curr = 0;
+        int max = 0;
+        int left = 0;
+        for (int right = 0; right < n; right++)
+        {
+            char c = s[right];
+            int lastpos = Count[c];
+            if (lastpos >= left)
+            {
+                left = lastpos;
+            }
+            Count[c] = right + 1;
+            curr = right - left + 1;
+            max = Math.Max(max, curr);
+        }
+        return max;
+    }
+
     //42. trapping rain water
     public int Trap(int[] height)
     {

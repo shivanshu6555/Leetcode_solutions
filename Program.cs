@@ -1,4 +1,5 @@
 ﻿using Leetcode_solutions;
+using MathNet.Numerics;
 using NPOI.SS.Formula.Functions;
 using System.Globalization;
 using System.Security.AccessControl;
@@ -100,9 +101,111 @@ Recursion rec = new();
 //}
 //Console.WriteLine(s.MaxFrequency(nums,5));
 
-Console.WriteLine(s.MinSubArrayLen(7,[2, 3, 1, 2, 4, 3]));
+//Console.WriteLine(s.MinSubArrayLen(7,[2, 3, 1, 2, 4, 3]));
+
+//Console.WriteLine((s.subarraySubarraysWithKDistinct([1, 2, 1, 2, 3], 2)) - (s.subarraySubarraysWithKDistinct([1, 2, 1, 2, 3], 1)));
+
+ListNode node1 = new ListNode(1);
+ListNode node2 = new ListNode(2);
+ListNode node3 = new ListNode(3);
+ListNode node4 = new ListNode(4);
+
+// 2. Create the structure: 3 -> 2 -> 0 -> -4
+node1.next = node2;
+node2.next = node3;
+node3.next = node4;
+node4.next = null;
+
+// 3. Create the cycle: -4 -> 2
+//node4.next = node2;
+ListNode result = s.MiddleOfLL(node1);
+Console.WriteLine(result.val+" "+ result.next);
+
 public class Solution
 {
+    //Middle of linked list
+    public ListNode MiddleOfLL(ListNode head)
+    {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null)
+        {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    //Linked list cycle
+    public ListNode DetectCycle(ListNode head)
+    {
+        if (head == null || head.next == null) { return null; }
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null)
+        {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast)
+            {
+                fast = head;
+                while (fast != slow)
+                {
+                    fast = fast.next;
+                    slow = slow.next;
+                }
+                return fast;
+            }
+        }
+        return null;
+    }
+
+    //finding subarray brute force
+    public int subarray(int[] nums, int k)
+    {
+
+        int Count = 0;
+        for (int i = 0; i < nums.Length; i++)
+        {
+            Dictionary<int, int> Distinct = new();
+            for (int j = i; j < nums.Length; j++)
+            {
+                if (Distinct.ContainsKey(nums[j]))
+                    Distinct[nums[j]]++;
+                else
+                    Distinct[nums[j]] = 1;
+                if (Distinct.Count == k) { Count++; }
+                else if (Distinct.Count > k) { break; }
+            }
+        }
+        return Count;
+    }
+
+    //992 subarray with k different integers
+    public int subarraySubarraysWithKDistinct(int[] nums, int k)
+    {
+        int n = nums.Length;
+        if (n <= 1) { return n; }
+        Dictionary<int, int> map = new();
+        int left = 0; int right = 0;int count = 0;
+        for (right = 0; right < n; right++)
+        {
+            if (map.ContainsKey(nums[right])) { map[nums[right]]++; }
+            else { map[nums[right]] = 1; }
+
+            while (map.Count() > k)
+            {
+                if (map.ContainsKey(nums[left])) { map[nums[left]]--; }
+                if (map[nums[left]] == 0) { map.Remove(nums[left]); }
+                left++;
+            }
+
+            count = count + (right - left + 1);
+        }
+        return count;
+    }
+
     //209. Minimum Size Subarray Sum
     public int MinSubArrayLen(int target, int[] nums)
     {

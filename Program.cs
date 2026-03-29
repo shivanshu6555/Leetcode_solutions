@@ -105,24 +105,65 @@ Recursion rec = new();
 
 //Console.WriteLine((s.subarraySubarraysWithKDistinct([1, 2, 1, 2, 3], 2)) - (s.subarraySubarraysWithKDistinct([1, 2, 1, 2, 3], 1)));
 
-ListNode node1 = new ListNode(1);
-ListNode node2 = new ListNode(2);
-ListNode node3 = new ListNode(3);
-ListNode node4 = new ListNode(4);
+//ListNode node1 = new ListNode(1);
+//ListNode node2 = new ListNode(2);
+//ListNode node3 = new ListNode(3);
+//ListNode node4 = new ListNode(4);
 
-// 2. Create the structure: 3 -> 2 -> 0 -> -4
-node1.next = node2;
-node2.next = node3;
-node3.next = node4;
-node4.next = null;
+//// 2. Create the structure: 3 -> 2 -> 0 -> -4
+//node1.next = node2;
+//node2.next = node3;
+//node3.next = node4;
+//node4.next = null;
 
-// 3. Create the cycle: -4 -> 2
-//node4.next = node2;
-ListNode result = s.MiddleOfLL(node1);
-Console.WriteLine(result.val+" "+ result.next);
+//// 3. Create the cycle: -4 -> 2
+////node4.next = node2;
+//ListNode result = s.MiddleOfLL(node1);
+//Console.WriteLine(result.val+" "+ result.next);
+
+int[] nums3 = new int[] { 2,1 };
+int[] nums4 = new int[] { 1,2 };
+foreach(int i in s.Intersect(nums3, nums4))
+{
+    Console.WriteLine(i);
+}
 
 public class Solution
 {
+    //350. Intersection of Two Arrays II
+
+    public int[] Intersect(int[] nums1, int[] nums2)
+    {
+        Dictionary<int, int> map = new();
+        foreach (int i in nums1)
+        {
+            if (!map.ContainsKey(i)) { map[i] = 0; }
+            else { map[i]++; }
+        }
+        List<int> result = new();
+        foreach (int i in nums2)
+        {
+            if (map.ContainsKey(i)) { result.Add(i); map[i]--; }
+        }
+        return result.ToArray();
+    }
+
+    //Reverse a LinkedList
+    public ListNode ReverseLL(ListNode head)
+    {
+        ListNode curr = head;
+        ListNode prev = null;
+        while (curr != null)
+        {
+            ListNode temp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = temp;
+        }
+
+        return prev;
+    }
+
     //Middle of linked list
     public ListNode MiddleOfLL(ListNode head)
     {

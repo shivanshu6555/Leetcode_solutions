@@ -7,7 +7,6 @@ using System.Text;
 
 
 string[] strs = [""];
-int[] nums1 = new int[] {1,3};
 int[] nums2 = new int[] {2};
 
 
@@ -121,15 +120,118 @@ Recursion rec = new();
 //ListNode result = s.MiddleOfLL(node1);
 //Console.WriteLine(result.val+" "+ result.next);
 
-int[] nums3 = new int[] { 2,1 };
-int[] nums4 = new int[] { 1,2 };
-foreach(int i in s.Intersect(nums3, nums4))
-{
-    Console.WriteLine(i);
-}
+//int[] nums3 = new int[] { 2,1 };
+//int[] nums4 = new int[] { 1,2 };
+//foreach(int i in s.Intersect(nums3, nums4))
+//{
+//    Console.WriteLine(i);
+//}
+int[] nums1 = new int[] { 4, 3, 2, 7, 8, 2, 3, 1 };
+
+//s.FindDisappearedNumbers(nums1);
+//foreach(int i in s.FindDisappearedNumbers(nums1))
+//{
+//    //Console.WriteLine(i);
+//}
+
+Console.WriteLine(s.BackspaceCompare("y#fo##f", "y#f#o##f"));
 
 public class Solution
 {
+
+    //844. Backspace String Compare
+    public string BackspaceComparehelper(string s)
+    {
+        Stack<char> Track = new();
+        foreach (char i in s)
+        {
+            if (Track.Count > 0 && i == '#')
+            {
+                Track.Pop();
+            }
+            else if (i != '#')
+            {
+                Track.Push(i);
+            }
+        }
+        string res = "";
+        foreach (char i in Track)
+        {
+            res += i;
+        }
+
+        return res;
+    }
+
+    public bool BackspaceCompare(string s, string t)
+    {
+        int i = s.Length - 1; int j = t.Length - 1;
+        int Skips = 0; int Skipt = 0;
+        while (i >= 0 || j >= 0)
+        {
+            while (i >= 0 && (Skips > 0 || s[i] == '#'))
+            {
+                if (s[i] == '#')
+                {
+                    Skips++; i--;
+                }
+                else
+                {
+                    Skips--; i--;
+                }
+            }
+            while (j >= 0 && (Skipt > 0 || t[j] == '#'))
+            {
+                if (t[j] == '#')
+                {
+                    Skipt++; j--;
+                }
+                else
+                {
+                    Skipt--; j--;
+                }
+            }
+            if (j < 0 && i >= 0) { return false; }
+            if (i < 0 && j >= 0) { return false; }
+            if (i >= 0 && j >= 0 && s[i] != t[j]) { return false; }
+            i--; j--;
+        }
+        return true;
+
+    }
+
+    //public bool BackspaceCompar(string s, string t)
+    //{
+    //    if(BackspaceComparehelper(s) == BackspaceComparehelper(t))
+    //    {
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
+
+    //448. Find All Numbers Disappeared in an Array
+    public IList<int> FindDisappearedNumbers(int[] nums)
+    {
+        
+        for (int i = 0; i < nums.Length; i++)
+        {
+            int curr = Math.Abs(nums[i]) - 1;
+            if (nums[curr]> 0)
+            {
+                nums[curr] = -nums[curr];
+            }
+        }
+        List<int> Final = new();
+        for (int i = 0; i < nums.Length; i++)
+        {
+            if (nums[i] > 0) { Final.Add(i+1); }
+        }
+        return Final;
+    }
+
     //350. Intersection of Two Arrays II
 
     public int[] Intersect(int[] nums1, int[] nums2)

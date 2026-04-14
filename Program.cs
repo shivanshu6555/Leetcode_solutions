@@ -126,7 +126,7 @@ Recursion rec = new();
 //{
 //    Console.WriteLine(i);
 //}
-int[] nums1 = new int[] { 4, 3, 2, 7, 8, 2, 3, 1 };
+int[] nums1 = new int[] { 0, 1, 1, 3, 3 };
 
 //s.FindDisappearedNumbers(nums1);
 //foreach(int i in s.FindDisappearedNumbers(nums1))
@@ -134,10 +134,45 @@ int[] nums1 = new int[] { 4, 3, 2, 7, 8, 2, 3, 1 };
 //    //Console.WriteLine(i);
 //}
 
-Console.WriteLine(s.BackspaceCompare("y#fo##f", "y#f#o##f"));
+Console.WriteLine(s.IsSubsequence("bcd", "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuubcd"));
 
 public class Solution
 {
+    //392. Is Subsequence
+    public bool IsSubsequence(string s, string t)
+    {
+        int i = 0; int j = 0;
+        while (j < t.Length)
+        {
+             if (s[i] == t[j]) { i++; j++; }
+            else { j++; }
+            if (i > s.Length - 1) { return true; }
+        }
+        return false;
+    }
+
+    //643. Maximum Average Subarray I
+    public double FindMaxAverage(int[] nums, int k)
+    {
+        int i = 0; int j = k - 1;
+        double Avg = int.MinValue; double currAvg = 0; double sum = 0;
+        for (int a = 0; a <= j; a++)
+        {
+            sum += nums[a];
+        }
+        Avg = (double)sum / k;
+        while (j < nums.Length -1 )
+        {
+            sum = sum - nums[i];
+            i++;
+            j++;
+            sum = sum + nums[j];
+            currAvg = sum / k;
+            Avg = Math.Max(Avg, currAvg);
+            
+        }
+        return Avg;
+    }
 
     //844. Backspace String Compare
     public string BackspaceComparehelper(string s)

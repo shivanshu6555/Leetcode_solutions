@@ -23,25 +23,26 @@ int[] nums2 = new int[] {2};
 
 //int[] nums1 = new int[] { 3, 1, 3, 4, 2 };
 //Console.WriteLine(s.FindDuplicate(nums1));
-//ListNode l1 = new ListNode();
-//l1.val = 5;
-//ListNode l2 = new ListNode();
-//l1.val = 2;
-//ListNode l3 = new ListNode();
-//l1.val = 13;
-//ListNode l4 = new ListNode();
-//l1.val = 3;
+ListNode l1 = new ListNode();
+l1.val = 1;
+ListNode l2 = new ListNode();
+l2.val = 1;
+ListNode l3 = new ListNode();
+l3.val = 2;
+ListNode l4 = new ListNode();
+l4.val = 1;
 //ListNode l5 = new ListNode();
 //l1.val = 8;
-//l1.next = l2;
-//l2.next = l3;
-//l3.next = l4;
-//l4.next = l5;
+l1.next = l2;
+l2.next = l3;
+l3.next = l4;
+l4.next = null;
 //ListNode head = new();
 //head.next = l1;
 //ListNode ans = s.RemoveNodes(head);
 //Console.WriteLine(ans.next);
-
+Solution s = new Solution();
+s.IsPalindrome(l1);
 //s.TopKFrequent(nums, 3);
 //foreach(int i in s.TopKFrequent(nums, 3))
 //{
@@ -59,7 +60,7 @@ int[] nums2 = new int[] {2};
 
 //Console.WriteLine(s.Fibonacci(6));
 
-Solution s = new();
+//Solution s = new();
 ////Console.WriteLine(s.IsSorted(nums, nums.Length));
 
 //Console.WriteLine(s.Search(nums1,2));
@@ -134,10 +135,46 @@ int[] nums1 = new int[] { 0, 1, 1, 3, 3 };
 //    //Console.WriteLine(i);
 //}
 
-Console.WriteLine(s.IsSubsequence("bcd", "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuubcd"));
+//Console.WriteLine(s.IsSubsequence("bcd", "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuubcd"));
 
 public class Solution
 {
+
+    public ListNode MergeTwoLists(ListNode list1, ListNode list2)
+    {
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+
+        // 2. Weave the lists together
+        while (list1 != null && list2 != null)
+        {
+            if (list1.val <= list2.val)
+            {
+                tail.next = list1;
+                list1 = list1.next;
+            }
+            else
+            {
+                tail.next = list2;
+                list2 = list2.next;
+            }
+            tail = tail.next;
+        }
+
+        // 3. Attach the remaining nodes (if any)
+        if (list1 != null)
+        {
+            tail.next = list1;
+        }
+        else if (list2 != null)
+        {
+            tail.next = list2;
+        }
+
+        // Return the node AFTER the dummy
+        return dummy.next;
+    }
+
     //392. Is Subsequence
     public bool IsSubsequence(string s, string t)
     {
@@ -299,6 +336,27 @@ public class Solution
         }
 
         return prev;
+    }
+
+    // 234. Palindrome Linked List
+    public bool IsPalindrome(ListNode head)
+    {
+        ListNode temphead = head;
+        ListNode right = ReverseLL(head);
+        ListNode left = temphead;
+        while (left != null && right != null)
+        {
+            if (left.val != right.val)
+            {
+                return false;
+            }
+            else
+            {
+                left = left.next;
+                right = right.next;
+            }
+        }
+        return true;
     }
 
     //Middle of linked list

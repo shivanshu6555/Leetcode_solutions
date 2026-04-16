@@ -42,7 +42,7 @@ l4.next = null;
 //ListNode ans = s.RemoveNodes(head);
 //Console.WriteLine(ans.next);
 Solution s = new Solution();
-s.IsPalindrome(l1);
+//s.IsPalindrome(l1);
 //s.TopKFrequent(nums, 3);
 //foreach(int i in s.TopKFrequent(nums, 3))
 //{
@@ -136,10 +136,29 @@ int[] nums1 = new int[] { 0, 1, 1, 3, 3 };
 //}
 
 //Console.WriteLine(s.IsSubsequence("bcd", "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuubcd"));
-
+char[] letters = new char[] { 'c', 'f', 'j' };
+Console.WriteLine(s.NextGreatestLetter(letters, 'c')); ;
 public class Solution
 {
-
+    //744. Find Smallest Letter Greater Than Target
+    public char NextGreatestLetter(char[] letters, char target)
+    {
+        int left = 0; int right = letters.Length - 1;
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+           
+           if (target < letters[mid])
+            {
+                right = mid - 1;
+            }
+            else
+            {
+                left = mid + 1;
+            }
+        }
+        return letters[left % letters.Length];
+    }
     public ListNode MergeTwoLists(ListNode list1, ListNode list2)
     {
         ListNode dummy = new ListNode(0);

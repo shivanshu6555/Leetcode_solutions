@@ -136,10 +136,68 @@ int[] nums1 = new int[] { 0, 1, 1, 3, 3 };
 //}
 
 //Console.WriteLine(s.IsSubsequence("bcd", "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuubcd"));
+
+TreeNode t1 = new TreeNode(1);
+TreeNode t2 = new TreeNode(2);
+TreeNode t3 = new TreeNode(3);
+TreeNode t4 = new TreeNode(4);
+TreeNode t5 = new TreeNode(5);
+TreeNode t6 = new TreeNode(6);
+TreeNode t7 = new TreeNode(7);
+t1.Left = t2;t1.Right = t7;
+t2.Left = t3;t2.Right = t4;
+t3.Left = null;t3.Right = null;
+t4.Left = t5;t4.Right = t6;
 char[] letters = new char[] { 'c', 'f', 'j' };
-Console.WriteLine(s.NextGreatestLetter(letters, 'c')); ;
+s.PreOrder(t1);
+Console.WriteLine();
+s.InOrder(t1);
+Console.WriteLine();
+s.PostOrder(t1);
+Console.WriteLine(s.MaxDepth(t1));
 public class Solution
 {
+
+    //104. Maximum Depth of Binary Tree
+    public int MaxDepth(TreeNode node)
+    {
+        if (node == null)
+        {
+            return 0;
+        }
+        int Left = MaxDepth(node.Left);
+        int right = MaxDepth(node.Right);
+
+        return Math.Max(Left, right) + 1;
+    }
+
+    //Preorder traversal of tree using recurison
+
+    public void PreOrder(TreeNode node)
+    {
+        if(node == null) { return; }
+        Console.Write(node.value);
+        PreOrder(node.Left);
+        PreOrder(node.Right);
+    }
+    //Preorder traversal of tree using recurison
+
+    public void InOrder(TreeNode node)
+    {
+        if(node == null) { return; }
+        PreOrder(node.Left);
+        Console.Write(node.value);
+        PreOrder(node.Right);
+    }
+    //Preorder traversal of tree using recurison
+
+    public void PostOrder(TreeNode node)
+    {
+        if(node == null) { return; }
+        PreOrder(node.Left);
+        PreOrder(node.Right);
+        Console.Write(node.value);
+    }
     //744. Find Smallest Letter Greater Than Target
     public char NextGreatestLetter(char[] letters, char target)
     {

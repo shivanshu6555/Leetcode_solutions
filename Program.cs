@@ -149,14 +149,35 @@ t2.Left = t3;t2.Right = t4;
 t3.Left = null;t3.Right = null;
 t4.Left = t5;t4.Right = t6;
 char[] letters = new char[] { 'c', 'f', 'j' };
-s.PreOrder(t1);
+//s.PreOrder(t1);
 Console.WriteLine();
 s.InOrder(t1);
-Console.WriteLine();
-s.PostOrder(t1);
-Console.WriteLine(s.MaxDepth(t1));
+//Console.WriteLine();
+//s.PostOrder(t1);
+List<int> list1 = new(s.PreorderIterative(t1));
+foreach(int i in list1)
+{
+    Console.Write(i);
+}
 public class Solution
 {
+
+    //Preorder traversal iterative
+    public List<int> PreorderIterative(TreeNode node)
+    {
+        List<int> PreOrder = new();
+        Stack<TreeNode> st = new();
+        st.Push(node);
+        while(st.Count != 0)
+        {
+            TreeNode root = st.Pop();
+            if (root.Right != null) { st.Push(root.Right); }
+            PreOrder.Add(root.value);
+            if (root.Left != null) { st.Push(root.Left); }
+
+        }
+        return PreOrder;
+    }
 
     //104. Maximum Depth of Binary Tree
     public int MaxDepth(TreeNode node)

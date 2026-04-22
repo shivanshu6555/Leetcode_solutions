@@ -140,27 +140,73 @@ int[] nums1 = new int[] { 0, 1, 1, 3, 3 };
 TreeNode t1 = new TreeNode(1);
 TreeNode t2 = new TreeNode(2);
 TreeNode t3 = new TreeNode(3);
-TreeNode t4 = new TreeNode(4);
-TreeNode t5 = new TreeNode(5);
-TreeNode t6 = new TreeNode(6);
-TreeNode t7 = new TreeNode(7);
-t1.Left = t2;t1.Right = t7;
-t2.Left = t3;t2.Right = t4;
-t3.Left = null;t3.Right = null;
-t4.Left = t5;t4.Right = t6;
+TreeNode t4 = new TreeNode(1);
+TreeNode t5 = new TreeNode(2);
+TreeNode t6 = new TreeNode(3);
+//TreeNode t7 = new TreeNode(7);
+t1.Left = t2; t1.Right = t3;
+t4.Left = t5; t4.Right = t6;
+//t2.Left = t3;t2.Right = t4;
+//t3.Left = null;t3.Right = null;
+//t4.Left = t5;t4.Right = t6;
 char[] letters = new char[] { 'c', 'f', 'j' };
 //s.PreOrder(t1);
-Console.WriteLine();
-s.InOrder(t1);
 //Console.WriteLine();
+
 //s.PostOrder(t1);
-List<int> list1 = new(s.PreorderIterative(t1));
-foreach(int i in list1)
+Console.WriteLine();
+List<int> list1 = new();
+List<int> list2 = new();
+s.InOrder(t1,list1);
+s.InOrder(t4,list2);
+foreach (int i in list1)
 {
     Console.Write(i);
 }
+foreach (int i in list2)
+{
+    Console.Write(i);
+}
+Console.WriteLine(list1==list2);
 public class Solution
 {
+
+    //112. Path Sum
+
+    public bool HasPathSum(TreeNode root, int targetSum)
+    {
+        int[] Max = new int[1];
+        Max[0] = int.MinValue;
+        bool res = false;
+        MaxPath(root, targetSum, Max, res);
+        return res;
+    }
+    public int MaxPath(TreeNode root, int targetSum, int[] Max, bool res)
+    {
+        if (root == null) { return 0; }
+        int leftSum = MaxPath(root.Left, targetSum, Max, res);
+        int rightSum = MaxPath(root.Right, targetSum, Max, res);
+        Max[0] = root.value + (leftSum + rightSum);
+        if (Max[0] == targetSum) { res = true; }
+        return Math.Max(leftSum, rightSum) + root.val;
+
+    }
+    //543. Diameter of Binary Tree
+    public int DiameterOfBinaryTree(TreeNode root) {
+    int MaxHeight = 0;
+    CalHeight(root, MaxHeight);
+        return MaxHeight;
+    }
+    public int CalHeight(TreeNode node, int MaxHeight)
+    {
+        int a = int.MinValue;
+        if (node == null) { return 0; }
+        int lh = CalHeight(node.Left, MaxHeight);
+        int rh = CalHeight(node.Right, MaxHeight);
+        MaxHeight = Math.Max(MaxHeight, lh + rh);
+        return (Math.Max(lh, rh)) + 1;
+    }
+
 
     //Preorder traversal iterative
     public List<int> PreorderIterative(TreeNode node)
@@ -171,12 +217,40 @@ public class Solution
         while(st.Count != 0)
         {
             TreeNode root = st.Pop();
-            if (root.Right != null) { st.Push(root.Right); }
             PreOrder.Add(root.value);
+            if (root.Right != null) { st.Push(root.Right); }
             if (root.Left != null) { st.Push(root.Left); }
 
         }
         return PreOrder;
+    }
+
+    //Postorder traversal iterative
+    public List<int> InorderIterative(TreeNode node)
+    {
+        List<int> InOrder = new();
+        Stack<TreeNode> st = new();
+        TreeNode root = node;
+        while (true)
+        {
+            if (root != null)
+            {
+                st.Push(root);
+                root = root.Left;
+            }
+            else
+            {
+                if(st.Count == 0)
+                {
+                    break;
+                }
+                root = st.Pop();
+                InOrder.Add(root.value);
+                root = root.Right;
+            }
+
+        }
+        return InOrder;
     }
 
     //104. Maximum Depth of Binary Tree
@@ -203,12 +277,12 @@ public class Solution
     }
     //Preorder traversal of tree using recurison
 
-    public void InOrder(TreeNode node)
+    public void InOrder(TreeNode node, List<int> result)
     {
         if(node == null) { return; }
-        PreOrder(node.Left);
-        Console.Write(node.value);
-        PreOrder(node.Right);
+        InOrder(node.Left,result);
+        result.Add(node.value);
+        InOrder(node.Right,result);
     }
     //Preorder traversal of tree using recurison
 

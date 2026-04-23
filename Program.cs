@@ -140,25 +140,44 @@ int[] nums1 = new int[] { 0, 1, 1, 3, 3 };
 TreeNode t1 = new TreeNode(1);
 TreeNode t2 = new TreeNode(2);
 TreeNode t3 = new TreeNode(3);
-TreeNode t4 = new TreeNode(1);
-TreeNode t5 = new TreeNode(2);
-TreeNode t6 = new TreeNode(3);
-//TreeNode t7 = new TreeNode(7);
-t1.Left = t2; t1.Right = t3;
-t4.Left = t5; t4.Right = t6;
-//t2.Left = t3;t2.Right = t4;
-//t3.Left = null;t3.Right = null;
-//t4.Left = t5;t4.Right = t6;
+TreeNode t4 = new TreeNode(4);
+TreeNode t5 = new TreeNode(5);
+//TreeNode t6 = new TreeNode(7);
+//TreeNode t7 = new TreeNode(8);
+//TreeNode t8 = new TreeNode(11);
+//TreeNode t9 = new TreeNode(13);
+//t1.Left = t2; t1.Right = t3;
+//t4.Left = t5; t4.Right = t6;
+//t2.Left = t3; t2.Right = t4;
+//t3.Left = null; t3.Right = null;
+//t4.Left = t5; t4.Right = t6;
+//path sum
+t3.Left = t4;t3.Right = t5;
+t4.Left = t1;t4.Right = t2;
+TreeNode t11 = new TreeNode(4);
+TreeNode t21= new TreeNode(1);
+TreeNode t31 = new TreeNode(2);
+
+//t1.Left = t2; t1.Right = t3;
+//t4.Left = t5; t4.Right = t6;
+//t2.Left = t3; t2.Right = t4;
+//t3.Left = null; t3.Right = null;
+//t4.Left = t5; t4.Right = t6;
+//path sum
+t11.Left = t21;t11.Right = t31;
+
 char[] letters = new char[] { 'c', 'f', 'j' };
-//s.PreOrder(t1);
+//s.PreOrder(t5);
 //Console.WriteLine();
 
 //s.PostOrder(t1);
 Console.WriteLine();
 List<int> list1 = new();
 List<int> list2 = new();
-s.InOrder(t1,list1);
-s.InOrder(t4,list2);
+s.InOrder(t3,list1);
+s.InOrder(t11,list2);
+
+Console.WriteLine(s.IsSubtree(t3,t11));
 foreach (int i in list1)
 {
     Console.Write(i);
@@ -167,28 +186,45 @@ foreach (int i in list2)
 {
     Console.Write(i);
 }
-Console.WriteLine(list1==list2);
+//Console.WriteLine(list1==list2);
 public class Solution
 {
 
+    //572. Subtree of Another Tree
+    public bool IsSubtree(TreeNode root, TreeNode subRoot)
+    {
+        //if(root == null && subRoot == null) { return true; }
+        if(root == null ) { return false; }
+        if (sameTree(root, subRoot)) { return true; }
+       
+
+        return IsSubtree(root.Left,subRoot) || IsSubtree(root.Right,subRoot);
+
+    }
+    public bool sameTree(TreeNode p, TreeNode q)
+    {
+        if (p == null && q == null) { return true; }
+        if (p == null || q == null) { return false; }
+        if (p.value != q.value) { return false; } 
+        return sameTree(p.Left, q.Left) && sameTree(p.Right, q.Right);
+    }
+
     //112. Path Sum
 
-    public bool HasPathSum(TreeNode root, int targetSum)
+    public int HasPathSum(TreeNode root)
     {
         int[] Max = new int[1];
         Max[0] = int.MinValue;
-        bool res = false;
-        MaxPath(root, targetSum, Max, res);
-        return res;
+        MaxPath(root, Max);
+        return Max[0];
     }
-    public int MaxPath(TreeNode root, int targetSum, int[] Max, bool res)
+    public int MaxPath(TreeNode root, int[] Max)
     {
         if (root == null) { return 0; }
-        int leftSum = MaxPath(root.Left, targetSum, Max, res);
-        int rightSum = MaxPath(root.Right, targetSum, Max, res);
-        Max[0] = root.value + (leftSum + rightSum);
-        if (Max[0] == targetSum) { res = true; }
-        return Math.Max(leftSum, rightSum) + root.val;
+        int leftSum = MaxPath(root.Left, Max);
+        int rightSum = MaxPath(root.Right, Max);
+        Max[0] = Math.Max(Max[0],root.value + (leftSum + rightSum));
+        return Math.Max(leftSum, rightSum) + root.value  ;
 
     }
     //543. Diameter of Binary Tree

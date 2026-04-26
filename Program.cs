@@ -177,7 +177,7 @@ List<int> list2 = new();
 s.InOrder(t3,list1);
 s.InOrder(t11,list2);
 
-Console.WriteLine(s.IsSubtree(t3,t11));
+Console.WriteLine(s.MergeTrees(t3,t11));
 foreach (int i in list1)
 {
     Console.Write(i);
@@ -189,6 +189,53 @@ foreach (int i in list2)
 //Console.WriteLine(list1==list2);
 public class Solution
 {
+    //637. Average of Levels in Binary Tree
+    public IList<double> AverageOfLevels(TreeNode root)
+    {
+        Queue<TreeNode> que = new();
+        List<double> result = new();
+        que.Enqueue(root);
+        que.Enqueue(null);
+        while(que.Peek() != null)
+        {
+            Double sum = 0;
+            int nodeCount = 0;
+            while(que.Peek() != null)
+            {
+                TreeNode node = que.Dequeue();
+                sum += node.value;
+                nodeCount++;
+                if (node.Left != null) { que.Enqueue(node.Left); }
+                if (node.Right != null) { que.Enqueue(node.Right); }
+
+            }
+            result.Add(sum / nodeCount);
+            que.Enqueue(que.Dequeue());
+        }
+        return result;
+    }
+
+
+    //617. Merge Two Binary Trees
+    public TreeNode MergeTrees(TreeNode root1, TreeNode root2)
+    {
+        if (root1 == null && root2 == null)
+        {
+            return null;
+        }
+        TreeNode t1 = root1 != null ? root1 : null;
+        TreeNode t2 = root2 != null ? root2 : null;
+        TreeNode root = new TreeNode(t1.value+t1.value);
+        if (root.Left != null)
+        {
+           root.Left = MergeTrees(root1.Left, root2.Left);
+        }
+        if (root.Right != null)
+        {
+           root.Right = MergeTrees(root1.Right, root2.Right);
+        }
+        return root;
+    }
 
     //572. Subtree of Another Tree
     public bool IsSubtree(TreeNode root, TreeNode subRoot)

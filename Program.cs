@@ -176,7 +176,7 @@ List<int> list1 = new();
 List<int> list2 = new();
 s.InOrder(t3,list1);
 s.InOrder(t11,list2);
-
+s.LevelOrder(t3);
 Console.WriteLine(s.MergeTrees(t3,t11));
 foreach (int i in list1)
 {
@@ -187,8 +187,71 @@ foreach (int i in list2)
     Console.Write(i);
 }
 //Console.WriteLine(list1==list2);
+int[] nums = [1, 2, 3, 4];
+//s.Construct2DArray(nums, 2, 2);
 public class Solution
 {
+    //2022. Convert 1D Array Into 2D Array
+
+    public int[][] Construct2DArray(int[] original, int m, int n)
+    {
+        if (m * n != original.Length) { return new int[0][]; }
+        int[][] result = new int[m][];
+        int index = 0;
+        for (int i = 0; i < m; i++)
+        {
+            for(int j=0; j < n; j++)
+            {
+                result[i][j] = original[index];
+                index++;
+            }
+        }
+        return result;
+    }
+
+    //2022. Convert 1D Array Into 2D Array optimized
+
+    //public int[][] Construct2DArray(int[] original, int m, int n)
+    //{
+    //    if (m * n != original.Length) { return new int[0][]; }
+    //    int[][] result = new int[m][];
+    //    for(int j = 0; j < m; j++)
+    //    {
+    //        result[j] = new int[]
+    //    }
+    //    for (int i = 0; i < m; i++)
+    //    {
+    //        for (int j = 0; j < n; j++)
+    //        {
+    //            result[i][j] = original[index];
+    //            index++;
+    //        }
+    //    }
+    //    return result;
+    //}
+
+    public IList<IList<int>> LevelOrder(TreeNode root)
+    {
+        Queue<TreeNode> que = new();
+        List<IList<int>> BFS = new();
+        que.Enqueue(root);
+        que.Enqueue(null);
+        while (que.Peek() != null)
+        {
+            List<int> Levels = new();
+            while (que.Peek() != null)
+            {
+                TreeNode node = que.Dequeue();
+                Levels.Add(node.value);
+                if (node.Left != null) { que.Enqueue(node.Left); }
+                if (node.Right != null) { que.Enqueue(node.Right); }
+            }
+            BFS.Add(Levels);
+            que.Enqueue(que.Dequeue());
+        }
+        return BFS;
+    }
+
     //637. Average of Levels in Binary Tree
     public IList<double> AverageOfLevels(TreeNode root)
     {

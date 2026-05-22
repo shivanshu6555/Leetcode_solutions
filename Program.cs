@@ -171,26 +171,53 @@ char[] letters = new char[] { 'c', 'f', 'j' };
 //Console.WriteLine();
 
 //s.PostOrder(t1);
-Console.WriteLine();
-List<int> list1 = new();
-List<int> list2 = new();
-s.InOrder(t3,list1);
-s.InOrder(t11,list2);
-s.LevelOrder(t3);
-Console.WriteLine(s.MergeTrees(t3,t11));
-foreach (int i in list1)
-{
-    Console.Write(i);
-}
-foreach (int i in list2)
-{
-    Console.Write(i);
-}
+//Console.WriteLine();
+//List<int> list1 = new();
+//List<int> list2 = new();
+//s.InOrder(t3,list1);
+//s.InOrder(t11,list2);
+//s.LevelOrder(t3);
+//Console.WriteLine(s.MergeTrees(t3,t11));
+//foreach (int i in list1)
+//{
+//    Console.Write(i);
+//}
+//foreach (int i in list2)
+//{
+//    Console.Write(i);
+//}
 //Console.WriteLine(list1==list2);
 int[] nums = [1, 2, 3, 4];
 //s.Construct2DArray(nums, 2, 2);
+
+s.LengthOfLongestSubstring("abcabcbb");
 public class Solution
 {
+
+    public int LengthOfLongestSubstringagain(string s)
+    {
+        int max = 0;
+        int curr = 0;
+        int n = s.Length;
+        int i = 0; int j = 0;
+        Dictionary<char, int> hash = new();
+        while (j < n)
+        {
+            if (hash.ContainsKey(s[j]))
+            {
+                i = j;
+                j++;
+            }
+            else
+            {
+                hash.Add(s[j], 0);
+                curr = j - i;
+                max = Math.Max(max, curr);
+                j++;
+            }
+        }
+        return max;
+    }
     //2022. Convert 1D Array Into 2D Array
 
     public int[][] Construct2DArray(int[] original, int m, int n)

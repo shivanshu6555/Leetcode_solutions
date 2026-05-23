@@ -190,33 +190,91 @@ char[] letters = new char[] { 'c', 'f', 'j' };
 int[] nums = [1, 2, 3, 4];
 //s.Construct2DArray(nums, 2, 2);
 
-s.LengthOfLongestSubstring("abcabcbb");
+Console.WriteLine(s.TotalFruit([1, 2, 3, 2, 2]));
 public class Solution
 {
-
-    public int LengthOfLongestSubstringagain(string s)
+    //904. Fruit Into Baskets
+    public int TotalFruit(int[] fruits)
     {
-        int max = 0;
-        int curr = 0;
-        int n = s.Length;
-        int i = 0; int j = 0;
-        Dictionary<char, int> hash = new();
-        while (j < n)
+        int left = 0; int right = 0;
+        Dictionary<int, int> hash = new();
+        int maxFruits = 0; int curr = 0;
+        while (right < fruits.Length)
         {
-            if (hash.ContainsKey(s[j]))
+            if (hash.Count <= 2)
             {
-                i = j;
-                j++;
+                if (hash.ContainsKey(fruits[right])) { hash[fruits[right]]++; }
+                else { hash.Add(fruits[right], 1); }
             }
             else
             {
-                hash.Add(s[j], 0);
-                curr = j - i;
-                max = Math.Max(max, curr);
-                j++;
+                hash.Remove(fruits[left]);
+                left++;
+            }
+            curr = right - left + 1;
+            maxFruits = Math.Max(curr, maxFruits);
+            right++;
+
+        }
+        return maxFruits;
+    }
+
+    //567. Permutation in String
+    public bool CheckInclusion(string s1, string s2)
+    {
+        int[] hash1 = new int[26];
+        int[] hash2 = new int[26];
+        
+        int n1 = s1.Length;
+        int n2 = s2.Length;
+        int left = 0; int right = n1 - 1;
+        for(int i = 0; i < n1; i++)
+        {
+            hash1[s1[i] - 'a']++;
+            hash2[s2[i] - 'a']++;
+        }
+        while (right < n2)
+        {
+            hash2[s2[right] - 'a']++;
+            hash2[s2[left] - 'a']--;
+            left++;
+            right++;
+
+            if (Matches(hash1, hash2)) { return true; }
+        }
+        return false;
+    }
+
+    public bool Matches(int[] arr1, int[] arr2)
+    {
+        for(int i=0;i < 26; i++)
+        {
+            if (arr1[i] != arr2[i])
+            {
+                return false;
             }
         }
-        return max;
+        return true;
+    }
+
+    //424 Longest Repeating Character Replacement
+
+    public int CharacterReplacement(string s, int k)
+    {
+        Span<int> hash = stackalloc int[26];
+        int left = 0; int maxlength = 0; int maxfreq = 0;
+        for (int right = 0; right < s.Length; right++)
+        {
+            hash[s[right] - 'A']++;
+            maxfreq = Math.Max(maxfreq, hash[s[right]-'A']);
+            if ((right - left + 1) - maxfreq > k)
+            {
+                hash[s[left] - 'A']--;
+                left++;
+            }
+            maxlength = Math.Max(maxlength, (right - left + 1));
+        }
+        return maxlength;
     }
     //2022. Convert 1D Array Into 2D Array
 
@@ -791,21 +849,18 @@ public class Solution
     public int MinSubArrayLen(int target, int[] nums)
     {
         int n = nums.Length;
-        if(n <= 1) { return n; }
-        int left = 0; int right = 0;
-        int curr = 0; int min = int.MaxValue; int sum = 0;
-        while (right < n)
-        {
+        if(n<=1){return n;}
+        int left = 0;int right = 0;
+        int sum = 0; int curr = 0; int min = int.MaxValue;
+        while(right<n){
             sum += nums[right];
-            if (sum >= target && left < n )
-            {
+            if(sum>=target && left < n){
                 curr = right - left + 1;
-                min = Math.Min(min, curr);
-                sum = sum - nums[left];
+                min = Math.Min(min,curr);
+                sum -= nums[left];
                 left++;
             }
-            else
-            {
+            else{
                 right++;
             }
         }

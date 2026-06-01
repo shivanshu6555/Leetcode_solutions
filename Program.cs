@@ -1,6 +1,8 @@
 ﻿using Leetcode_solutions;
 using MathNet.Numerics;
+using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.Formula.Functions;
+using NPOI.XWPF.UserModel;
 using System.Globalization;
 using System.Security.AccessControl;
 using System.Text;
@@ -26,17 +28,18 @@ int[] nums2 = new int[] {2};
 ListNode l1 = new ListNode();
 l1.val = 1;
 ListNode l2 = new ListNode();
-l2.val = 1;
+l2.val = 2;
 ListNode l3 = new ListNode();
-l3.val = 2;
+l3.val = 3;
 ListNode l4 = new ListNode();
-l4.val = 1;
-//ListNode l5 = new ListNode();
-//l1.val = 8;
+l4.val = 4;
+ListNode l5 = new ListNode();
+l5.val = 5;
 l1.next = l2;
 l2.next = l3;
 l3.next = l4;
-l4.next = null;
+l4.next = l5;
+l5.next = null;
 //ListNode head = new();
 //head.next = l1;
 //ListNode ans = s.RemoveNodes(head);
@@ -187,12 +190,84 @@ char[] letters = new char[] { 'c', 'f', 'j' };
 //    Console.Write(i);
 //}
 //Console.WriteLine(list1==list2);
-int[] nums = [1, 2, 3, 4];
+int[] nums = [1,2,3];
+int[][] matrix = [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]];
 //s.Construct2DArray(nums, 2, 2);
-
-Console.WriteLine(s.TotalFruit([1, 2, 3, 2, 2]));
+Console.WriteLine(s.search2d(matrix, 21));
+//Console.WriteLine(s.TotalFruit([1, 2, 3, 2, 2]));
+s.RemoveNthFromEnd(l1,2);
 public class Solution
 {
+    //search in a 2d matrix
+    public bool search2d(int[][] nums,int target)
+    {
+        for(int i = 0; i < nums.Length; i++)
+        {
+            for(int j = 0; j < nums[0].Length; j++)
+            {
+                if (nums[i][j] == target)
+                { return true; }
+            }
+        }
+        return false;
+    }
+    public ListNode RemoveNthFromEnd(ListNode head, int n)
+    {
+        if (head == null || head.next == null) { return null; }
+        ListNode newHead = new ListNode(0,head);
+        ListNode left = newHead;
+        ListNode right = head;
+        while (n > 0 && right != null)
+        {
+            right = right.next;
+            n--;
+        }
+        while (right != null)
+        {
+            left = left.next;
+            right = right.next;
+        }
+        left.next = left.next.next;
+        return newHead.next;
+    }
+    public void subarrays(int[] arr)
+    {
+        
+        for(int i = 0; i < arr.Length; i++)
+        {
+            for (int j = i; j < arr.Length; j++)
+            {
+                Console.Write("[");
+            int mul = 1 ;
+
+                for (int k = i; k <= j; k++)
+                {
+                     mul *= arr[k];
+                    Console.Write(arr[k]+" ");
+                }
+                Console.WriteLine("]"+ mul);
+            }
+        }
+    }
+    public int NumSubarrayProductLessThanK(int[] nums, int k)
+    {
+        int mul = 1;
+        int count = 0;
+        int left = 0;
+        for (int right = 0; right < nums.Length; right++)
+        {
+            mul *= nums[right];
+            while (mul >= k)
+            {
+                mul /= nums[left];
+                left++;
+            }
+            count += (right - left + 1);
+        }
+        return count;
+    }
+
+
     //904. Fruit Into Baskets
     public int TotalFruit(int[] fruits)
     {

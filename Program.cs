@@ -193,11 +193,35 @@ char[] letters = new char[] { 'c', 'f', 'j' };
 int[] nums = [1,2,3];
 int[][] matrix = [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]];
 //s.Construct2DArray(nums, 2, 2);
-Console.WriteLine(s.search2d(matrix, 21));
+Console.WriteLine(s.FindPeakElement([1, 2, 1, 3, 5, 6, 4]));
 //Console.WriteLine(s.TotalFruit([1, 2, 3, 2, 2]));
 s.RemoveNthFromEnd(l1,2);
 public class Solution
 {
+
+    //162. Find Peak element
+    public int FindPeakElement(int[] nums)
+    {
+        int n = nums.Length;
+        int low = 0; int high = n - 1;
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+            if (nums[mid] > nums[mid - 1] && nums[mid] > nums[mid + 1])
+            {
+                return nums[mid];
+            }
+            else if (nums[mid] < nums[mid + 1])
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+        return -1;
+    }
     //search in a 2d matrix
     public bool search2d(int[][] nums,int target)
     {

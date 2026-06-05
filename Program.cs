@@ -141,25 +141,25 @@ int[] nums1 = new int[] { 0, 1, 1, 3, 3 };
 //Console.WriteLine(s.IsSubsequence("bcd", "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuubcd"));
 
 TreeNode t1 = new TreeNode(1);
-TreeNode t2 = new TreeNode(2);
 TreeNode t3 = new TreeNode(3);
 TreeNode t4 = new TreeNode(4);
 TreeNode t5 = new TreeNode(5);
+TreeNode t6 = new TreeNode(6);
 //TreeNode t6 = new TreeNode(7);
 //TreeNode t7 = new TreeNode(8);
 //TreeNode t8 = new TreeNode(11);
 //TreeNode t9 = new TreeNode(13);
-//t1.Left = t2; t1.Right = t3;
-//t4.Left = t5; t4.Right = t6;
-//t2.Left = t3; t2.Right = t4;
-//t3.Left = null; t3.Right = null;
-//t4.Left = t5; t4.Right = t6;
+t5.Left = t1; t5.Right = t4;
+t4.Left = t3; t4.Right = t6;
+t3.Left = null; t3.Right = null;
+t6.Left = null; t6.Right = null;
+t1.Left = null; t1.Right = null;
 //path sum
-t3.Left = t4;t3.Right = t5;
-t4.Left = t1;t4.Right = t2;
-TreeNode t11 = new TreeNode(4);
-TreeNode t21= new TreeNode(1);
-TreeNode t31 = new TreeNode(2);
+//t3.Left = t4;t3.Right = t5;
+//t4.Left = t1;t4.Right = t2;
+//TreeNode t11 = new TreeNode(4);
+//TreeNode t21= new TreeNode(1);
+//TreeNode t31 = new TreeNode(2);
 
 //t1.Left = t2; t1.Right = t3;
 //t4.Left = t5; t4.Right = t6;
@@ -167,7 +167,7 @@ TreeNode t31 = new TreeNode(2);
 //t3.Left = null; t3.Right = null;
 //t4.Left = t5; t4.Right = t6;
 //path sum
-t11.Left = t21;t11.Right = t31;
+//t11.Left = t21;t11.Right = t31;
 
 char[] letters = new char[] { 'c', 'f', 'j' };
 //s.PreOrder(t5);
@@ -190,14 +190,83 @@ char[] letters = new char[] { 'c', 'f', 'j' };
 //    Console.Write(i);
 //}
 //Console.WriteLine(list1==list2);
-int[] nums = [1,2,3];
+int[] nums = [5,3,7,6,8,9,3,2,5];
 int[][] matrix = [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]];
 //s.Construct2DArray(nums, 2, 2);
 Console.WriteLine(s.FindPeakElement([1, 2, 1, 3, 5, 6, 4]));
 //Console.WriteLine(s.TotalFruit([1, 2, 3, 2, 2]));
-s.RemoveNthFromEnd(l1,2);
+//s.RemoveNthFromEnd(l1,2);
+s.IsValidBST(t5);
+// Fix for CS9176: Add commas between inner arrays and specify the type explicitly
+int[][] merged = [[1, 3], [2, 6], [8, 10], [15, 18]]; 
+Console.WriteLine("--------------------");
+s.Merge(merged);
+foreach (int[] interval in s.Merge(merged))
+{
+    Console.Write("[" + interval[0] + ", " + interval[1] + "]");
+}
+Console.WriteLine();
+//foreach(int i in s.SelectionSort(nums)) { Console.Write(i); }
 public class Solution
 {
+    //56. Merged Intervals
+
+    public int[][] Merge(int[][] intervals)
+    {
+        if (intervals.Length <= 1) { return intervals; }
+        Array.Sort(intervals, (a, b) => a[0].CompareTo(b[0]));
+        List<int[]> res = new();
+        res.Add(intervals[0]);
+        for (int i = 1; i < intervals.Length; i++)
+        {
+            int[] current = intervals[i];
+            int[] lastmerged = res[res.Count - 1];
+
+            if (lastmerged[1] >= current[0])
+            {
+                lastmerged[1] = Math.Max(lastmerged[1], current[1]);
+            }
+            else
+            {
+                res.Add(current);
+            }
+        }
+
+        return res.ToArray();
+
+    }
+
+    //Selection Sort
+    public int[] SelectionSort(int[] nums)
+    {
+        int n = nums.Length;
+        for(int i = 0; i <= n - 2; i++)
+        {
+            int min = i;
+            for(int j=i; j<=n-1; j++)
+            {
+                if (nums[j] < nums[min]) { min = j; }
+            }
+            (nums[i], nums[min]) = (nums[min], nums[i]);
+        }
+        return nums;
+    }
+
+    //98. Validate Binary Search Tree
+    public bool IsValidBST(TreeNode node)
+    {
+        return IsValid(node, null, null);
+    }
+    //helper
+    public bool IsValid(TreeNode root,long? left, long? right)
+    {
+        if (root == null) { return true; }
+        if((left!=null&&root.value<=left)||(right != null && root.value >= right))
+        {
+            return false;
+        }
+        return IsValid(root.Left, left, root.value) && IsValid(root.Right, root.value, right);
+    }
 
     //162. Find Peak element
     public int FindPeakElement(int[] nums)

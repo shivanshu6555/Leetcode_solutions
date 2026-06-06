@@ -198,17 +198,38 @@ Console.WriteLine(s.FindPeakElement([1, 2, 1, 3, 5, 6, 4]));
 //s.RemoveNthFromEnd(l1,2);
 s.IsValidBST(t5);
 // Fix for CS9176: Add commas between inner arrays and specify the type explicitly
-int[][] merged = [[1, 3], [2, 6], [8, 10], [15, 18]]; 
+int[][] merged = [[1, 100], [11, 22], [1, 11], [2, 12]]; 
 Console.WriteLine("--------------------");
-s.Merge(merged);
-foreach (int[] interval in s.Merge(merged))
-{
-    Console.Write("[" + interval[0] + ", " + interval[1] + "]");
-}
+s.EraseOverlapIntervals(merged);
+//foreach (int[] interval in s.Merge(merged))
+//{
+//    Console.Write("[" + interval[0] + ", " + interval[1] + "]");
+//}
 Console.WriteLine();
 //foreach(int i in s.SelectionSort(nums)) { Console.Write(i); }
 public class Solution
 {
+
+    //435 Non overlaping intervals
+    public int EraseOverlapIntervals(int[][] intervals)
+    {
+        Array.Sort(intervals, (a, b) => a[0].CompareTo(b[0]));
+        int n = intervals.Length;
+        int count = 0;
+        int[] current = intervals[0];
+        for (int i = 1; i < n ; i++)
+        {
+            if (intervals[i][0] < current[1])
+            {
+                count += 1;
+            }
+            else
+            {
+                current = intervals[i];
+            }
+        }
+        return count;
+    }
     //56. Merged Intervals
 
     public int[][] Merge(int[][] intervals)

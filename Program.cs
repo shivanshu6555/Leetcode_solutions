@@ -198,9 +198,16 @@ Console.WriteLine(s.FindPeakElement([1, 2, 1, 3, 5, 6, 4]));
 //s.RemoveNthFromEnd(l1,2);
 s.IsValidBST(t5);
 // Fix for CS9176: Add commas between inner arrays and specify the type explicitly
-int[][] merged = [[1, 100], [11, 22], [1, 11], [2, 12]]; 
+int[][] first = [[0, 2], [5, 10], [13, 23], [24, 25]]; 
+int[][] second = [[1, 5], [8, 12], [15, 24], [25, 26]];
+char[][] grid = 
+[['1', '1', '1', '1', '0'], 
+['1', '1', '0', '1', '0'], 
+['1', '1', '0', '0', '0'], 
+['0', '0', '0', '0', '0']];
+
 Console.WriteLine("--------------------");
-s.EraseOverlapIntervals(merged);
+s.NumIslands(grid);
 //foreach (int[] interval in s.Merge(merged))
 //{
 //    Console.Write("[" + interval[0] + ", " + interval[1] + "]");
@@ -209,6 +216,67 @@ Console.WriteLine();
 //foreach(int i in s.SelectionSort(nums)) { Console.Write(i); }
 public class Solution
 {
+    //200 Number of Islands
+    public int NumIslands(char[][] grid)
+    {
+        int islands = 0;
+        for (int i = 0; i < grid.Length; i++)
+        {
+            for (int j = 0; j < grid[0].Length; j++)
+            {
+                if (grid[i][j] == 1)
+                {
+                    DFS(grid, i, j);
+                    islands++;
+                }
+            }
+        }
+        return islands;
+    }
+
+    public void DFS(char[][] grid, int i, int j)
+    {
+        if (i < 0 || i >= grid.Length || j < 0 || j >= grid[0].Length || grid[i][j] == '0')
+        {
+            return;
+        }
+        grid[i][j] = '0';
+        DFS(grid, i, j + 1);
+        DFS(grid, i, j - 1);
+        DFS(grid, i + 1, j);
+        DFS(grid, i - 1, j);
+    }
+
+    //986. Interval list intersections
+    public int[][] IntervalIntersection(int[][] firstList, int[][] secondList)
+    {
+        List<int[]> result = new();
+        int a = firstList.Length;
+        int b = secondList.Length;
+        int i = 0; int j = 0;
+       
+        while (i < a && j < b)
+        {
+            if (firstList[i][0] <= secondList[j][1] && firstList[i][1] >= secondList[j][0])
+            {
+                int[] temp = new int[2];
+                temp[0] = Math.Max(firstList[i][0], secondList[j][0]);
+                temp[1] = Math.Min(firstList[i][1], secondList[j][1]);
+                result.Add(temp);
+
+               
+            }
+            if (firstList[i][1] < secondList[j][1])
+            {
+                i++;
+            }
+            else
+            {
+                j++;
+            }
+        }
+        return result.ToArray();
+    }
 
     //435 Non overlaping intervals
     public int EraseOverlapIntervals(int[][] intervals)

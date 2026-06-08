@@ -206,8 +206,10 @@ char[][] grid =
 ['1', '1', '0', '0', '0'], 
 ['0', '0', '0', '0', '0']];
 
+int[][] heights = [[1, 2, 2, 3, 5], [3, 2, 3, 4, 4], [2, 4, 5, 3, 1], [6, 7, 1, 4, 5], [5, 1, 1, 2, 4]];
 Console.WriteLine("--------------------");
-s.NumIslands(grid);
+//s.NumIslands(grid);
+s.PacificAtlantic(heights);
 //foreach (int[] interval in s.Merge(merged))
 //{
 //    Console.Write("[" + interval[0] + ", " + interval[1] + "]");
@@ -216,6 +218,65 @@ Console.WriteLine();
 //foreach(int i in s.SelectionSort(nums)) { Console.Write(i); }
 public class Solution
 {
+
+    //417. Pacific Atlantic Water Flow
+    public IList<IList<int>> PacificAtlantic(int[][] heights)
+    {
+        IList<IList<int>> result = new List<IList<int>>();
+        if (heights == null || heights.Length == 0 || heights[0].Length == 0) { return result; }
+
+        int row = heights.Length;
+        int col = heights[0].Length;
+
+        bool[,] pacific = new bool[row, col];
+        bool[,] Atlantic = new bool[row, col];
+
+        //columns
+        for (int c = 0; c < col; c++)
+        {
+            dfs(heights, 0, c, pacific, heights[0][c]);
+            dfs(heights, row - 1, c, Atlantic, heights[row - 1][c]);
+        }
+
+        //rows
+        for (int r = 0; r < row; r++)
+        {
+            dfs(heights, r, 0, pacific, heights[r][0]);
+            dfs(heights, r, col - 1, Atlantic, heights[r][col - 1]);
+        }
+
+        for (int r = 0; r < row; r++)
+        {
+            for (int c = 0; c < col; c++)
+            {
+                if (pacific[r, c] && Atlantic[r, c])
+                {
+                    result.Add(new List<int> { r, c });
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public void dfs(int[][] heights, int r, int c, bool[,] ocean, int prevHeight)
+    {
+        int row = heights.Length;
+        int col = heights[0].Length;
+
+        if (r < 0 || r >= row || col < 0 || col >= col || ocean[r, c] || heights[r][c] < prevHeight)
+        {
+            return;
+        }
+
+        ocean[r, c] = true;
+        dfs(heights, r + 1, c, ocean, heights[r][c]);
+        dfs(heights, r - 1, c, ocean, heights[r][c]);
+        dfs(heights, r, c + 1, ocean, heights[r][c]);
+        dfs(heights, r, c - 1, ocean, heights[r][c]);
+    }
+
+
     //200 Number of Islands
     public int NumIslands(char[][] grid)
     {
@@ -247,7 +308,7 @@ public class Solution
         DFS(grid, i - 1, j);
     }
 
-    //986. Interval list intersections
+    //986 Interval list intersections
     public int[][] IntervalIntersection(int[][] firstList, int[][] secondList)
     {
         List<int[]> result = new();

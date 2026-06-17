@@ -216,8 +216,96 @@ s.PacificAtlantic(heights);
 //}
 Console.WriteLine();
 //foreach(int i in s.SelectionSort(nums)) { Console.Write(i); }
+int[][] edges = [[0, 1], [0, 2], [0, 3], [1, 4]];
+s.ValidTree(5, edges);
 public class Solution
 {
+
+    public bool ValidTree(int n, int[][] edges)
+    {
+        if (edges.Length != n) { return false; }
+
+        List<List<int>> adjancy = new();
+
+        for (int i = 0; i < n; i++)
+        {
+            adjancy.Add(new List<int>());
+        }
+
+        foreach (int[] edge in edges)
+        {
+            adjancy[edge[0]].Add(edge[1]);
+            adjancy[edge[1]].Add(edge[0]);
+        }
+
+        HashSet<int> visited = new();
+        Queue<int> que = new();
+
+        que.Enqueue(0);
+        visited.Add(0);
+
+        while (que.Count > 0)
+        {
+            int current = que.Dequeue();
+
+            foreach (int neighbour in adjancy[current])
+            {
+                if (!visited.Contains(neighbour))
+                {
+                    visited.Add(neighbour);
+                    que.Enqueue(neighbour);
+                }
+            }
+        }
+
+        return visited.Count == n;
+    }
+
+    //261.Graph valid tree
+    public bool ValidTree1(int n, int[][] edges)
+    {
+        // 1. Condition check: A tree with n nodes MUST have exactly n - 1 edges
+        if (edges.Length != n - 1) return false;
+
+        // 2. Build the adjacency list for the undirected graph
+        List<List<int>> adjList = new List<List<int>>();
+        for (int i = 0; i < n; i++)
+        {
+            adjList.Add(new List<int>());
+        }
+        foreach (var edge in edges)
+        {
+            adjList[edge[0]].Add(edge[1]);
+            adjList[edge[1]].Add(edge[0]);
+        }
+
+        // 3. BFS traversal to check connectivity
+        HashSet<int> visited = new HashSet<int>();
+        Queue<int> queue = new Queue<int>();
+
+        // Start from node 0
+        queue.Enqueue(0);
+        visited.Add(0);
+
+        while (queue.Count > 0)
+        {
+            int current = queue.Dequeue();
+
+            foreach (int neighbor in adjList[current])
+            {
+                // If we haven't seen this neighbor, mark it visited and queue it
+                if (!visited.Contains(neighbor))
+                {
+                    visited.Add(neighbor);
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+
+        // 4. If we visited all nodes, it's fully connected (and hence a valid tree)
+        return visited.Count == n;
+    }
+
 
     //417. Pacific Atlantic Water Flow
     public IList<IList<int>> PacificAtlantic(int[][] heights)

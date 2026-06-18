@@ -216,11 +216,51 @@ s.PacificAtlantic(heights);
 //}
 Console.WriteLine();
 //foreach(int i in s.SelectionSort(nums)) { Console.Write(i); }
-int[][] edges = [[0, 1], [0, 2], [0, 3], [1, 4]];
-s.ValidTree(5, edges);
+int[][] edges = [[1, 0]];
+s.CanFinish(2, edges);
 public class Solution
 {
 
+    //207. Course Schedule
+
+    public bool CanFinish(int numCourses, int[][] prerequisites)
+    {
+        List<List<int>> graph = new();
+        int[] InDegree = new int[numCourses];
+        for (int i = 0; i < numCourses; i++)
+        {
+            graph.Add(new List<int>());
+        }
+        foreach (int[] pre in prerequisites)
+        {
+            graph[pre[1]].Add(pre[0]);
+            InDegree[pre[0]]++;
+            
+        }
+        Queue<int> queue = new();
+        for (int i = 0; i < numCourses; i++)
+        {
+            if (InDegree[i] == 0)
+            {
+                queue.Enqueue(i);
+            }
+        }
+        int count = 0;
+        while (queue.Count > 0)
+        {
+            int curr = queue.Dequeue();
+            count++;
+            foreach (int next in graph[curr])
+            {
+                InDegree[next]--;
+                if (InDegree[next] == 0) { queue.Enqueue(next); }
+            }
+        }
+
+        return count == numCourses;
+    }
+
+    //261.Graph valid tree using queue
     public bool ValidTree(int n, int[][] edges)
     {
         if (edges.Length != n) { return false; }

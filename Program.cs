@@ -221,6 +221,35 @@ s.CanFinish(2, edges);
 public class Solution
 {
 
+    //973. K Closest Points to Origin
+
+    public int[][] KClosest(int[][] points, int k)
+    {
+        int n = points.Length;
+        Dictionary<int[], int> map = new();
+        foreach(var point in points)
+        {
+            int dist = ((point[0] - 0) * (point[0] - 0)) + ((point[1] - 0) * (point[1] - 0));
+            map.Add(point, dist);
+        }
+        var maxheapcomparer = Comparer<int>.Create((a, b) => b.CompareTo(a));
+        PriorityQueue<int[], int> maxheap = new PriorityQueue<int[], int>(maxheapcomparer);
+        foreach(var point in map)
+        {
+            maxheap.Enqueue(point.Key, point.Value);
+            if(maxheap.Count > k)
+            {
+                maxheap.Dequeue();
+            }
+        }
+        int[][] result = new int[k][];
+        for (int i = 0; i < k; i++)
+        {
+            result[i] = maxheap.Dequeue(); 
+        }
+        return result;
+    }
+
     //207. Course Schedule
 
     public bool CanFinish(int numCourses, int[][] prerequisites)

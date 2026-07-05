@@ -218,8 +218,82 @@ Console.WriteLine();
 //foreach(int i in s.SelectionSort(nums)) { Console.Write(i); }
 int[][] edges = [[1, 0]];
 s.CanFinish(2, edges);
+
+List<Interval> inter = new List<Interval> { new Interval(5,10), new Interval(0,4), new Interval(15, 20) };
+
+//Console.WriteLine(s.CanAttendMeetings(inter));
+
+int[] arr = new int[] {4,3,6,5,7,9,1,2 };
+//Console.WriteLine(s.Maxheapimplementation(arr));
+
+s.SearchMatrix(matrix, 3);
 public class Solution
 {
+    //74. Search a 2D Matrix
+
+    public bool SearchMatrix(int[][] matrix, int target)
+    {
+        int n = matrix.Length;
+        int m = matrix[0].Length;
+        int low = 0; int high = m * n - 1;
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+            int row = mid / m;
+            int col = mid % m;
+            if (matrix[row][col] == target)
+            {
+                return true;
+            }
+            else if (matrix[row][col] < target)
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+        return false;
+    }
+
+    //Max heap 
+
+    public int Maxheapimplementation(int[] arr)
+    {
+        var maxheap = new PriorityQueue<int, int>(Comparer<int>.Create((x, y) => y.CompareTo(x)));
+        foreach(int i in arr)
+        {
+            maxheap.Enqueue(i, i);
+            if(maxheap.Count > 6)
+            {
+                maxheap.Dequeue();
+            }
+        }
+
+        return maxheap.Dequeue();
+    }
+
+    //252. meetings room
+
+    public bool CanAttendMeetings(List<Interval> intervals)
+    {
+            
+        int n = intervals.Count;
+        int end = intervals[0].end;
+        for(int i = 1; i < n; i++)
+        {
+            if(end > intervals[i].start)
+            {
+                return false;
+            }
+            else
+            {
+                end = intervals[i].end;
+            }
+        }
+        return true;
+    }
 
     //973. K Closest Points to Origin
 
@@ -1886,5 +1960,15 @@ public class Solution
             else { low = mid1 + 1; }
         }
         return 0.0;
+    }
+}
+
+public class Interval
+{
+    public int start, end;
+    public Interval(int start, int end)
+    {
+        this.start = start;
+        this.end = end;
     }
 }

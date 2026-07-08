@@ -191,7 +191,7 @@ char[] letters = new char[] { 'c', 'f', 'j' };
 //}
 //Console.WriteLine(list1==list2);
 int[] nums = [5,3,7,6,8,9,3,2,5];
-int[][] matrix = [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]];
+int[][] matrix = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]];
 //s.Construct2DArray(nums, 2, 2);
 Console.WriteLine(s.FindPeakElement([1, 2, 1, 3, 5, 6, 4]));
 //Console.WriteLine(s.TotalFruit([1, 2, 3, 2, 2]));
@@ -226,9 +226,149 @@ List<Interval> inter = new List<Interval> { new Interval(5,10), new Interval(0,4
 int[] arr = new int[] {4,3,6,5,7,9,1,2 };
 //Console.WriteLine(s.Maxheapimplementation(arr));
 
-s.SearchMatrix(matrix, 3);
+//s.SearchMatrix(matrix, 3);
+
+s.SpiralOrder(matrix);
 public class Solution
 {
+
+    // 54. Spiral Matrix
+
+    public IList<int> SpiralOrder(int[][] matrix)
+    {
+        int r = matrix.Length;
+        int c = matrix[0].Length;
+        List<int> result = new();
+        int top = 0; int left = 0;
+        int bottom = r - 1; int right = c - 1;
+
+        while (left <= right && top <= bottom)
+        {
+            //right  => bottom => left => top
+            //right
+            for (int i = left; i <= right; i++)
+            {
+                result.Add(matrix[top][i]);
+            }
+            top++;
+            for (int i = top; i <= bottom; i++)
+            {
+                result.Add(matrix[i][right]);
+            }
+            right--;
+
+            if (top <= bottom)
+            {
+                for (int i = right; i >= left; i--)
+                {
+                    result.Add(matrix[bottom][i]);
+                }
+                bottom--;
+
+            }
+            if (left <= right)
+            {
+                for (int i = bottom; i >= top; i--)
+                {
+                    result.Add(matrix[i][left]);
+                }
+                left++;
+
+            }
+        }
+        return result;
+    }
+
+    // 73. Set matrix zeroes -> optimized solution with O(1) SC and O(m*n) Tc
+
+    public void SetZeroesOptimized(int[][] matrix)
+    {
+        int row = matrix.Length;
+        int col = matrix[0].Length;
+        int col0 = -1;
+        for (int r = 0; r < row; r++)
+        {
+            for (int c = 0; c < col; c++)
+            {
+                if (matrix[r][c] == 0)
+                {
+                    matrix[r][0] = 0;
+                    if (c != 0)
+                    {
+                        matrix[0][c] = 0;
+                    }
+                    else
+                    {
+                        col0 = 0;
+                    }
+                }
+            }
+        }
+
+        for (int r = 1; r < row; r++)
+        {
+            for (int c = 1; c < col; c++)
+            {
+                if (matrix[0][c] == 0 || matrix[r][0] == 0)
+                {
+                    matrix[r][c] = 0;
+                }
+            }
+        }
+
+        for (int c = 0; c < col; c++)
+        {
+            if (matrix[0][0] == 0)
+            {
+                matrix[0][c] = 0;
+            }
+        }
+
+        for (int r = 0; r < row; r++)
+        {
+            if (col0 == 0)
+            {
+                matrix[r][0] = 0;
+            }
+        }
+    }
+
+    // 73. Set Matrix Zeroes
+
+    public void SetZeroes(int[][] matrix)
+    {
+        int row = matrix.Length;
+        int col = matrix[0].Length;
+
+        int[] rowflag = new int[row];
+        int[] colflag = new int[col];
+
+        for (int r = 0; r < row; r++)
+        {
+            for (int c = 0; c < col; c++)
+            {
+                if (matrix[r][c] == 0)
+                {
+                    rowflag[r] = 1;
+                    colflag[c] = 1;
+                }
+            }
+        }
+
+        for (int r = 0; r < row; r++)
+        {
+            for (int c = 0; c < col; c++)
+            {
+                if (rowflag[r] == 1 || colflag[c] == 1)
+                {
+                    matrix[r][c] = 0;
+                }
+            }
+        }
+
+    }
+
+
     //74. Search a 2D Matrix
 
     public bool SearchMatrix(int[][] matrix, int target)

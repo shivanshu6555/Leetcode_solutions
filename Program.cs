@@ -191,15 +191,15 @@ char[] letters = new char[] { 'c', 'f', 'j' };
 //}
 //Console.WriteLine(list1==list2);
 int[] nums = [5,3,7,6,8,9,3,2,5];
-int[][] matrix = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]];
+int[][] matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
 //s.Construct2DArray(nums, 2, 2);
 Console.WriteLine(s.FindPeakElement([1, 2, 1, 3, 5, 6, 4]));
 //Console.WriteLine(s.TotalFruit([1, 2, 3, 2, 2]));
 //s.RemoveNthFromEnd(l1,2);
 s.IsValidBST(t5);
 // Fix for CS9176: Add commas between inner arrays and specify the type explicitly
-int[][] first = [[0, 2], [5, 10], [13, 23], [24, 25]]; 
-int[][] second = [[1, 5], [8, 12], [15, 24], [25, 26]];
+int[][] first = [[0, 2], [5, 10], [13, 23], [24, 25]];
+int[][] second = new int[1][];
 char[][] grid = 
 [['1', '1', '1', '1', '0'], 
 ['1', '1', '0', '1', '0'], 
@@ -228,9 +228,37 @@ int[] arr = new int[] {4,3,6,5,7,9,1,2 };
 
 //s.SearchMatrix(matrix, 3);
 
-s.SpiralOrder(matrix);
+s.Rotate(matrix);
 public class Solution
 {
+    // 48. rotate Image
+
+    public void Rotate(int[][] matrix)
+    {
+        int n = matrix.Length;
+        for (int i = 0; i < n - 1; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                (matrix[i][j], matrix[j][i]) = (matrix[j][i], matrix[i][j]);
+            }
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            ReverseArray(matrix[i]);
+        }
+    }
+
+    public void ReverseArray(int[] arr)
+    {
+        int l = 0; int r = arr.Length - 1;
+        while (l <= r)
+        {
+            (arr[l], arr[r]) = (arr[r], arr[l]);
+            l++; r--;
+        }
+    }
 
     // 54. Spiral Matrix
 

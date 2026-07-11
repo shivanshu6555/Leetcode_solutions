@@ -3,6 +3,7 @@ using MathNet.Numerics;
 using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.Formula.Functions;
 using NPOI.XWPF.UserModel;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Security.AccessControl;
 using System.Text;
@@ -228,9 +229,60 @@ int[] arr = new int[] {4,3,6,5,7,9,1,2 };
 
 //s.SearchMatrix(matrix, 3);
 
-s.Rotate(matrix);
+//s.Rotate(matrix);
+Console.WriteLine(s.IsValid("()[]{}"));
+Console.WriteLine(s.IsPalindrome("A man, a plan, a canal: Panama"));
+
 public class Solution
 {
+
+
+    //125. Valid palindrome
+
+    public bool IsPalindrome(string s)
+    {
+        s = new string(s.Where(char.IsLetterOrDigit).Select(char.ToLower).ToArray());
+        int left = 0; int right = s.Length - 1;
+        while (left <= right)
+        {
+            if (s[left] == s[right])
+            {
+                left++; right--;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 242. Valid Anagram
+    
+    public bool IsAnagram(string s, string t)
+    {
+        int n = s.Length;
+        int m = t.Length;
+        if (m > n) { return IsAnagram(t, s); }
+        Span<int> map = stackalloc int[26];
+        for(int i =0; i< n; i++)
+        {
+            map[s[i] - 'a']++;
+        }
+        for (int i = 0; i < m; i++)
+        {
+            map[t[i] - 'a']--;
+        }
+        for(int i = 0; i<map.Length; i++)
+        {
+            if (map[i] == 1)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // 48. rotate Image
 
     public void Rotate(int[][] matrix)
@@ -804,17 +856,17 @@ public class Solution
     //98. Validate Binary Search Tree
     public bool IsValidBST(TreeNode node)
     {
-        return IsValid(node, null, null);
+        return IsValidhelper(node, null, null);
     }
     //helper
-    public bool IsValid(TreeNode root,long? left, long? right)
+    public bool IsValidhelper(TreeNode root,long? left, long? right)
     {
         if (root == null) { return true; }
         if((left!=null&&root.value<=left)||(right != null && root.value >= right))
         {
             return false;
         }
-        return IsValid(root.Left, left, root.value) && IsValid(root.Right, root.value, right);
+        return IsValidhelper(root.Left, left, root.value) && IsValidhelper(root.Right, root.value, right);
     }
 
     //162. Find Peak element

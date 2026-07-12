@@ -6,13 +6,12 @@ using NPOI.XWPF.UserModel;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Security.AccessControl;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 
 string[] strs = [""];
 int[] nums2 = new int[] {2};
-
-
 
 //s.GroupAnagrams(strs);
 //s.TopKFrequent([1,1,1,1,1,1,1,1,1,1,2,2,3,3]);
@@ -233,9 +232,13 @@ int[] arr = new int[] {4,3,6,5,7,9,1,2 };
 Console.WriteLine(s.IsValid("()[]{}"));
 Console.WriteLine(s.IsPalindrome("A man, a plan, a canal: Panama"));
 
+
 public class Solution
 {
-
+    ~Solution()
+    {
+        Console.WriteLine("finalizer called");
+    }
 
     //125. Valid palindrome
 

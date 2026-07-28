@@ -231,13 +231,39 @@ int[] arr = new int[] {4,3,6,5,7,9,1,2 };
 //s.Rotate(matrix);
 Console.WriteLine(s.IsValid("()[]{}"));
 Console.WriteLine(s.IsPalindrome("A man, a plan, a canal: Panama"));
-
+Console.WriteLine(s.LongestConsecutive([100, 4, 200, 1, 3, 2]));
 
 public class Solution
 {
     ~Solution()
     {
         Console.WriteLine("finalizer called");
+    }
+
+    //128. Longest consecutive sequence
+
+    public int LongestConsecutive(int[] nums)
+    {
+        int n = nums.Length;
+        HashSet<int> map = new(nums);
+
+        int maxcount = 0;
+        foreach (int i in map)
+        {
+            if (!map.Contains(i - 1))
+            {
+                int j = 1;
+                int currcount = 1;
+                while (map.Contains(i + j))
+                {
+                    j = j + 1;
+                    currcount += 1;
+                }
+                maxcount = Math.Max(currcount, maxcount);
+            }
+        }
+
+        return maxcount;
     }
 
     //125. Valid palindrome

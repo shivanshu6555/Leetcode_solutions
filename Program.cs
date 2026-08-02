@@ -143,17 +143,22 @@ int[] nums1 = new int[] { 0, 1, 1, 3, 3 };
 TreeNode t1 = new TreeNode(1);
 TreeNode t3 = new TreeNode(3);
 TreeNode t4 = new TreeNode(4);
-TreeNode t5 = new TreeNode(5);
-TreeNode t6 = new TreeNode(6);
+TreeNode t5 = new TreeNode(2);
+//TreeNode t6 = new TreeNode(6);
 //TreeNode t6 = new TreeNode(7);
 //TreeNode t7 = new TreeNode(8);
 //TreeNode t8 = new TreeNode(11);
 //TreeNode t9 = new TreeNode(13);
-t5.Left = t1; t5.Right = t4;
-t4.Left = t3; t4.Right = t6;
-t3.Left = null; t3.Right = null;
-t6.Left = null; t6.Right = null;
-t1.Left = null; t1.Right = null;
+//t5.Left = t1; t5.Right = t4;
+//t4.Left = t3; t4.Right = t6;
+//t3.Left = null; t3.Right = null;
+//t6.Left = null; t6.Right = null;
+//t1.Left = null; t1.Right = null;
+
+//LC 230
+t3.Left = t1; t3.Right = t4;
+t1.Right = t5;
+
 //path sum
 //t3.Left = t4;t3.Right = t5;
 //t4.Left = t1;t4.Right = t2;
@@ -232,12 +237,28 @@ int[] arr = new int[] {4,3,6,5,7,9,1,2 };
 Console.WriteLine(s.IsValid("()[]{}"));
 Console.WriteLine(s.IsPalindrome("A man, a plan, a canal: Panama"));
 Console.WriteLine(s.LongestConsecutive([100, 4, 200, 1, 3, 2]));
-
+Console.WriteLine(s.KthSmallest(t3,1));
 public class Solution
 {
-    ~Solution()
+
+    //230. Kth Smallest Element in a BST
+
+    public int KthSmallest(TreeNode root, int k)
     {
-        Console.WriteLine("finalizer called");
+        List<int> lst = new();
+        Inorder(root, lst);
+        return lst[k - 1];
+    }
+    public void Inorder(TreeNode node, List<int> list)
+    {
+        if (node == null)
+        {
+            return;
+        }
+
+        Inorder(node.Left, list);
+        list.Add(node.value);
+        Inorder(node.Right, list);
     }
 
     //128. Longest consecutive sequence

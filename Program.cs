@@ -238,13 +238,87 @@ Console.WriteLine(s.IsValid("()[]{}"));
 Console.WriteLine(s.IsPalindrome("A man, a plan, a canal: Panama"));
 Console.WriteLine(s.LongestConsecutive([100, 4, 200, 1, 3, 2]));
 Console.WriteLine(s.KthSmallest(t3,1));
+s.FindKthLargest([3, 2, 1, 5, 6, 4],2);
+
+string str1 = "abcdefg";
+Console.WriteLine(s.ReverseStr(str1,2));
+
 public class Solution
 {
+    //541. Reverse String II
+    public string ReverseStr(string s, int k)
+    {
+        int n = s.Length;
+        int last = s.Length;
+        int i = 0;
+        StringBuilder str = new();
+        char[] arr = s.ToCharArray();
+        while (n != 0)
+        {
+            if (n >= 2 * k)
+            {
+                str.Append(Reverse(arr[i..(i+k)]));
+                i = i + k;
+                str.Append(arr[i..(i + k)]);
+                i = i + k;
+                n = n - 2 * k;
+            }
+            if(n < k)
+            {
+                str.Append(Reverse(arr[i..last]));
+                n = 0;
+            }
+            if(n < 2 * k && n >= k)
+            {
+                str.Append(Reverse(arr[i..(i + k)]));
+                i = i + k;
+                n = n - k;
+                str.Append(arr[i..last]);
+                n = 0;
+            }
+        }
+        return str.ToString();
+    }
+
+
+public string Reverse(char[] arr)
+{
+    int n = arr.Length;
+    int i = 0;
+    int j = n - 1;
+    while (i <= j)
+    {
+        (arr[i], arr[j]) = (arr[j], arr[i]);
+        i++;
+        j--;
+    }
+    return new string(arr);
+}
+
+   
+    public int FindKthLargest(int[] nums, int k)
+    {
+        int n = nums.Length;
+        PriorityQueue<int, int> maxheap = new();
+        for (int i = 0; i < n; i++)
+        {
+            
+            maxheap.Enqueue(nums[i], nums[i]);
+            if (maxheap.Count > k)
+            {
+
+                maxheap.Dequeue();
+            }
+        }
+        return maxheap.Dequeue();
+    }
 
     //230. Kth Smallest Element in a BST
 
     public int KthSmallest(TreeNode root, int k)
     {
+
+
         List<int> lst = new();
         Inorder(root, lst);
         return lst[k - 1];

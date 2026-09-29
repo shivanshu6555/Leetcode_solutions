@@ -46,6 +46,7 @@ l5.next = null;
 //Console.WriteLine(ans.next);
 Solution s = new Solution();
 //s.IsPalindrome(l1);
+Console.WriteLine(s.FindMaxAverage([8860, -853, 6534, 4477, -4589, 8646, -6155, -5577, -1656, -5779, -2619, -8604, -1358, -8009, 4983, 7063, 3104, -1560, 4080, 2763, 5616, -2375, 2848, 1394, -7173, -5225, -8244, -809, 8025, -4072, -4391, -9579, 1407, 6700, 2421, -6685, 5481, -1732, -8892, -6645, 3077, 3287, -4149, 8701, -4393, -9070, -1777, 2237, -3253, -506, -4931, -7366, -8132, 5406, -6300, -275, -1908, 67, 3569, 1433, -7262, -437, 8303, 4498, -379, 3054, -6285, 4203, 6908, 4433, 3077, 2288, 9733, -8067, 3007, 9725, 9669, 1362, -2561, -4225, 5442, -9006, -429, 160, -9234, -4444, 3586, -5711, -9506, -79, -4418, -4348, -5891], 93));
 //s.TopKFrequent(nums, 3);
 //foreach(int i in s.TopKFrequent(nums, 3))
 //{
@@ -241,10 +242,66 @@ Console.WriteLine(s.KthSmallest(t3,1));
 s.FindKthLargest([3, 2, 1, 5, 6, 4],2);
 
 string str1 = "abcdefg";
-Console.WriteLine(s.ReverseStr(str1,2));
+Console.WriteLine(s.ReverseStr(str1, 2));
+s.IsSubsequence2("ace", "abcde");
+
+Console.WriteLine(s.MaxVowels("leetcode",3));
 
 public class Solution
 {
+    //1456. Maximum Number of Vowels in a Substring of Given Length
+
+    public int MaxVowels(string s, int k)
+    {
+        int n = s.Length;
+        int l = 0;
+        
+        int max = 0;
+        int currcount = 0;
+       for(int i = 0; i < k; i++)
+        {
+            if (helperIsVowel(s[i]))
+            {
+                currcount++;
+            }
+        }
+        max = currcount;
+        int r = k;
+        while(r < n)
+        {
+            if (helperIsVowel(s[r])) { currcount++; }
+            r++;
+            if (helperIsVowel(s[l])) { currcount--; }
+            l++;
+            max = Math.Max(max, currcount);
+        }
+
+        return max;
+
+    }
+
+    public bool helperIsVowel(char c)
+    {
+        return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' );
+    }
+
+public bool IsSubsequence2(string s, string t)
+    {
+        int n1 = s.Length;
+        int n2 = t.Length;
+        int i = 0; int j = 0;
+        while (j < n2)
+        {
+            if (s[i] == t[j])
+            {
+                i++;
+                j++;
+            }
+            else { j++; }
+        }
+
+        return (i == n1 - 1);
+    }
     //541. Reverse String II
     public string ReverseStr(string s, int k)
     {
@@ -1487,24 +1544,26 @@ public string Reverse(char[] arr)
     //643. Maximum Average Subarray I
     public double FindMaxAverage(int[] nums, int k)
     {
-        int i = 0; int j = k - 1;
-        double Avg = int.MinValue; double currAvg = 0; double sum = 0;
-        for (int a = 0; a <= j; a++)
+        int n = nums.Length;
+        if (n == 1) { return nums[0]; }
+        int left = 0;
+        int right = k - 1;
+        double avg = 0;
+        double maxAvg = double.MinValue;
+        while (right < n)
         {
-            sum += nums[a];
+            double sum = 0.0;
+            for (int i = left; i <= right; i++)
+            {
+                sum += nums[i];
+            }
+            avg = sum / k;
+            left++;
+            right++;
+            maxAvg = Math.Max(maxAvg, avg);
         }
-        Avg = (double)sum / k;
-        while (j < nums.Length -1 )
-        {
-            sum = sum - nums[i];
-            i++;
-            j++;
-            sum = sum + nums[j];
-            currAvg = sum / k;
-            Avg = Math.Max(Avg, currAvg);
-            
-        }
-        return Avg;
+
+        return maxAvg;
     }
 
     //844. Backspace String Compare

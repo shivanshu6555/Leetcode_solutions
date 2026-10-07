@@ -242,13 +242,57 @@ Console.WriteLine(s.KthSmallest(t3,1));
 s.FindKthLargest([3, 2, 1, 5, 6, 4],2);
 
 string str1 = "abcdefg";
-Console.WriteLine(s.ReverseStr(str1, 2));
+//Console.WriteLine(s.ReverseStr(str1, 2));
 s.IsSubsequence2("ace", "abcde");
 
-Console.WriteLine(s.MaxVowels("leetcode",3));
-
+//Console.WriteLine(s.MaxVowels("leetcode",3));
+Console.WriteLine(s.FindDifference([-80, -15, -81, -28, -61, 63, 14, -45, -35, -10], [-1, -40, -44, 41, 10, -43, 69, 10, 2]));
 public class Solution
 {
+    //2215. Find the Difference of Two Arrays
+    public IList<IList<int>> FindDifference(int[] nums1, int[] nums2)
+    {
+        int n1 = nums1.Length;
+        int n2 = nums2.Length;
+        Dictionary<int, int> map = new();
+        List<IList<int>> result = new();
+        foreach (int i in nums1)
+        {
+            if (!map.ContainsKey(i))
+            {
+                map.Add(i, 1);
+            }
+        }
+        foreach (int i in nums2)
+        {
+            if (map.ContainsKey(i))
+            {
+                map.Remove(i);
+            }
+            else
+            {
+                map.Add(i, 2);
+            }
+        }
+
+        result.Add(new List<int>());
+        result.Add(new List<int>());
+
+        foreach (var kvp in map)
+        {
+            if (kvp.Value == 1)
+            {
+                result[0].Add(kvp.Key);
+            }
+            else
+            {
+                result[1].Add(kvp.Key);
+            }
+        }
+
+        return result;
+    }
+
     //1456. Maximum Number of Vowels in a Substring of Given Length
 
     public int MaxVowels(string s, int k)

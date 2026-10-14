@@ -4,6 +4,7 @@ using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.Formula.Functions;
 using NPOI.XWPF.UserModel;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
@@ -246,9 +247,221 @@ string str1 = "abcdefg";
 s.IsSubsequence2("ace", "abcde");
 
 //Console.WriteLine(s.MaxVowels("leetcode",3));
-Console.WriteLine(s.FindDifference([-80, -15, -81, -28, -61, 63, 14, -45, -35, -10], [-1, -40, -44, 41, 10, -43, 69, 10, 2]));
+//Console.WriteLine(s.FindDifference([-80, -15, -81, -28, -61, 63, 14, -45, -35, -10], [-1, -40, -44, 41, 10, -43, 69, 10, 2]));
+//Console.WriteLine(s.CloseStrings("cabbba","abbccc"));
+//Console.WriteLine(s.EqualPairs([[3, 2, 1], [1, 7, 6], [2, 7, 7]]));
+//bool b = Enumerable.SequenceEqual(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 });
+//Console.WriteLine(s.RemoveStars("leet**cod*e"));
+
+//Console.WriteLine(s.AsteroidCollision([-2, -2, 1, -1]));
+//Console.WriteLine(s.DecodeString("3[a2[c]]"));
+
+Console.WriteLine(s.DecodeString("3[a]2[bc]"));
+
+
 public class Solution
 {
+
+    //394. Decode String
+
+    public string DecodeString(string s)
+    {
+        Stack<int> numStack = new();
+        Stack<string> charStack = new();
+
+        int k = 0;
+
+        foreach(char i in s)
+        {
+            if (char.IsDigit(i))
+            {
+                k = k * 10 + (i - '0');
+                continue;
+            }
+            if(i == '[')
+            {
+                numStack.Push(k);
+                k = 0;
+                charStack.Push(i.ToString());
+                continue;
+            }
+            if(i != ']')
+            {
+                charStack.Push(i.ToString());
+                continue;
+            }
+
+            StringBuilder temp = new();
+            string stackTop = charStack.Pop();
+            while(stackTop != "[")
+            {
+                temp.Insert(0,stackTop);
+                stackTop = charStack.Pop();
+            }
+            int repeat = numStack.Pop();
+            StringBuilder replacmenet = new();
+            for(int r = 0; r < repeat; r++)
+            {
+                replacmenet.Insert(0, temp);
+            }
+
+            charStack.Push(replacmenet.ToString());
+            
+        }
+
+        StringBuilder result = new();
+        int n = charStack.Count;
+        for (int i = 0; i < n; i++)
+        {
+            result.Insert(0, charStack.Pop());
+        }
+
+        return result.ToString();
+    }
+
+    //735. Asteroid Collision
+    public int[] AsteroidCollision(int[] asteroids)
+    {
+        int n = asteroids.Length;
+        Stack<int> stk = new();
+        stk.Push(asteroids[n - 1]);
+
+        for (int i = n - 2; i >= 0; i--)
+        {
+            if (stk.Count == 0)
+            {
+                stk.Push(asteroids[i]);
+            }
+            int curr = stk.Peek();
+            if (curr < 0)
+            {
+                curr = curr * -1;
+                if (asteroids[i] > curr)
+                {
+                    stk.Pop();
+                    stk.Push(asteroids[i]);
+                }
+                else if (asteroids[i] == curr)
+                {
+                    stk.Pop();
+                }
+                else if (asteroids[i] < 0)
+                {
+                    stk.Push(asteroids[i]);
+                }
+            }
+            else
+            {
+                stk.Push(asteroids[i]);
+            }
+        }
+
+        int[] result = new int[stk.Count];
+        for (int i = 0; i < result.Length; i++)
+        {
+            result[i] = stk.Pop();
+        }
+
+        return result;
+    }
+
+    //2390. Removing Stars From a String
+    public string RemoveStars(string s)
+    {
+        int n = s.Length;
+        Stack<char> stk = new();
+        foreach (char i in s)
+        {
+            if (i == '*')
+            {
+                stk.Pop();
+            }
+            else
+            {
+                stk.Push(i);
+            }
+        }
+        char[] result = new char[stk.Count];
+        for (int i = result.Length - 1; i >= 0; i--)
+        {
+            result[i] = stk.Pop();
+        }
+        
+        return new string(result);
+    }
+
+    //2352. Equal Row and Column Pairs
+    public int EqualPairs(int[][] grid)
+    {
+        Dictionary<int, int[]> rows = new();
+        Dictionary<int, int[]> cols = new();
+
+        for (int i = 0; i < grid.Length; i++)
+        {
+            rows.Add(i, new int[grid.Length]);
+            for (int j = 0; j < grid.Length; j++)
+            {
+                rows[i][j] = grid[i][j];
+            }
+        }
+
+        for (int i = 0; i < grid.Length; i++)
+        {
+            cols.Add(i, new int[grid.Length]);
+            for (int j = 0; j < grid.Length; j++)
+            {
+                cols[i][j] = grid[j][i];
+            }
+        }
+
+        int count = 0;
+        for (int i = 0; i < rows.Count; i++)
+        {
+            for (int j = 0; j < rows.Count; j++)
+            {
+                if (Enumerable.SequenceEqual(rows[i], cols[j]))
+                    count++;
+            }
+        }
+
+        return -1;
+    }
+
+    //1657. Determine if Two Strings Are Close
+
+    public bool CloseStrings(string word1, string word2)
+    {
+        int[] char1 = new int[26];
+        int[] char2 = new int[26];
+
+        if (word1.Length != word2.Length) { return false; }
+
+        for(int i=0; i < word1.Length; i++)
+        {
+            char1[word1[i] - 'a']++;
+            char2[word2[i] - 'a']++;
+        }
+
+        for(int i =0;i < 26; i++)
+        {
+            if (char1[i] > 0 && char2[i] == 0) { return false; }
+        }
+
+        Array.Sort(char1);
+        Array.Sort(char2);
+
+        for(int i = 0; i < 26; i++)
+        {
+            if (char1[i] != char2[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
     //2215. Find the Difference of Two Arrays
     public IList<IList<int>> FindDifference(int[] nums1, int[] nums2)
     {

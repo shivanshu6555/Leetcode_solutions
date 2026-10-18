@@ -1,5 +1,6 @@
 ﻿using Leetcode_solutions;
 using MathNet.Numerics;
+using NPOI.HSSF.Record;
 using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.SS.Formula.Functions;
 using NPOI.XWPF.UserModel;
@@ -29,18 +30,24 @@ int[] nums2 = new int[] {2};
 ListNode l1 = new ListNode();
 l1.val = 1;
 ListNode l2 = new ListNode();
-l2.val = 2;
+l2.val = 3;
 ListNode l3 = new ListNode();
-l3.val = 3;
+l3.val = 4;
 ListNode l4 = new ListNode();
-l4.val = 4;
+l4.val = 7;
 ListNode l5 = new ListNode();
-l5.val = 5;
+l5.val = 1;
+ListNode l6 = new ListNode();
+l6.val = 2;
+ListNode l7 = new ListNode();
+l7.val = 6;
 l1.next = l2;
 l2.next = l3;
 l3.next = l4;
 l4.next = l5;
-l5.next = null;
+l5.next = l6;
+l6.next = l7;
+l7.next = null;
 //ListNode head = new();
 //head.next = l1;
 //ListNode ans = s.RemoveNodes(head);
@@ -258,10 +265,85 @@ s.IsSubsequence2("ace", "abcde");
 
 Console.WriteLine(s.DecodeString("3[a]2[bc]"));
 
-
+s.linkedListCount(l1);
+s.rec(5);
 public class Solution
 {
 
+    public bool LeafSimilar(TreeNode root1, TreeNode root2)
+    {
+        List<int> tree1 = new();
+        List<int> tree2 = new();
+
+        LeafTrack(root1, tree1);
+        LeafTrack(root2, tree2);
+
+        for (int i = 0; i < tree1.Count; i++)
+        {
+            if (tree1[i] != tree2[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void LeafTrack(TreeNode root, List<int> list)
+    {
+
+        //872. Leaf-Similar Trees
+        if (root == null) { return; }
+
+        if (root.Left == null && root.Right == null)
+        {
+            list.Add(root.value);
+        }
+
+        LeafTrack(root.Left, list);
+        LeafTrack(root.Right, list);
+    }
+
+    public int rec(int i)
+    {
+        if(i == 0) { return 0 ; }
+        Console.WriteLine("rec "+ i);
+        return rec(i - 1);
+    }
+    public void linkedListCount(ListNode head)
+    {
+        ListNode curr = head;
+        int count = 0;
+
+        while (curr != null)
+        {
+            count++;
+            curr = curr.next;
+        }
+
+        int middle = count / 2;
+        Console.WriteLine("middle " + middle);
+        ListNode mid = head;
+        ListNode prev = null;
+        for (int i = 0; i < middle; i++)
+        {
+            prev = mid;
+            mid = mid.next;
+            Console.WriteLine("mid in loop " + mid.val);
+        }
+        Console.WriteLine("final prev "+ prev.val);
+        Console.WriteLine("final mid "+ mid.val);
+
+        prev.next = mid.next;
+
+        ListNode anothercurr = head;
+        while(anothercurr != null)
+        {
+            Console.Write(anothercurr.val + "-->");
+            anothercurr = anothercurr.next;
+        }
+
+    }
     //394. Decode String
 
     public string DecodeString(string s)

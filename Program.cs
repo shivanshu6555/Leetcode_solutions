@@ -264,11 +264,108 @@ s.IsSubsequence2("ace", "abcde");
 //Console.WriteLine(s.DecodeString("3[a2[c]]"));
 
 Console.WriteLine(s.DecodeString("3[a]2[bc]"));
+TreeNode root = new TreeNode(10);
 
-s.linkedListCount(l1);
-s.rec(5);
+// Level 2
+TreeNode node5 = new TreeNode(5);
+TreeNode nodeNeg3 = new TreeNode(-3);
+root.Left = node5;
+root.Right = nodeNeg3;
+
+// Level 3
+TreeNode node3_left = new TreeNode(3);
+TreeNode node2 = new TreeNode(2);
+TreeNode node11 = new TreeNode(11);
+node5.Left = node3_left;
+node5.Right = node2;
+nodeNeg3.Right = node11;
+
+// Level 4
+TreeNode node3_ll = new TreeNode(3);
+TreeNode nodeNeg2 = new TreeNode(-2);
+TreeNode node1 = new TreeNode(1);
+node3_left.Left = node3_ll;
+node3_left.Right = nodeNeg2;
+node2.Left = node1;
+
+TreeNode root2 = new TreeNode(5);
+
+// Level 2
+TreeNode nodeA = new TreeNode(4);
+TreeNode nodeB = new TreeNode(8);
+root2.Left = nodeA;
+root2.Right = nodeB;
+
+// Level 3
+TreeNode nodeC = new TreeNode(11);
+TreeNode nodeD = new TreeNode(13);
+TreeNode nodeE = new TreeNode(4);
+nodeA.Left = nodeC;
+nodeA.Right = nodeD;
+nodeB.Right = nodeE;
+
+// Level 4
+TreeNode nodeF = new TreeNode(7);
+TreeNode nodeG = new TreeNode(2);
+TreeNode nodeH = new TreeNode(5);
+TreeNode nodeI = new TreeNode(1);
+nodeC.Left = nodeF;
+nodeC.Right = nodeG;
+nodeE.Left = nodeH;
+nodeE.Right = nodeI;
+
+// Now you can use this tree with your methods
+//s.PathSum(root2, 22);
+
+
+s.PathSum(root, 8);
 public class Solution
 {
+    //437. Path Sum III
+    int count = 0;
+
+    public int PathSum(TreeNode root, int targetSum)
+    {
+        // Dictionary stores: { Prefix Sum : How many times we've seen it on this path }
+        Dictionary<long, int> prefixSums = new Dictionary<long, int>();
+
+        // Base case: A path can exactly equal targetSum from the root, 
+        // requiring us to subtract 0.
+        prefixSums.Add(0, 1);
+
+        Dfs(root, 0, targetSum, prefixSums);
+        return count;
+    }
+                                                                                    
+    private void Dfs(TreeNode node, long currentSum, int targetSum, Dictionary<long, int> prefixSums)
+    {
+        if (node == null) return;
+
+        currentSum += node.value;
+
+        // 1. Check if a sub-path sums to the target
+        long excess = currentSum - targetSum;
+        if (prefixSums.ContainsKey(excess))
+        {
+            count += prefixSums[excess];
+        }
+
+        // 2. Add current sum to our path history
+        if (!prefixSums.ContainsKey(currentSum))
+        {
+            prefixSums[currentSum] = 0;
+        }
+        prefixSums[currentSum]++;
+
+        // 3. Traverse down to children
+        Dfs(node.Left, currentSum, targetSum, prefixSums);
+        Dfs(node.Right, currentSum, targetSum, prefixSums);
+
+        // 4. BACKTRACK: Remove the current sum before going back up the tree.
+        // We only want prefix sums from the *current* direct path from root to leaf.
+        // We don't want a left branch's sum polluting the right branch's dictionary.
+        prefixSums[currentSum]--;
+    }
 
     public bool LeafSimilar(TreeNode root1, TreeNode root2)
     {
@@ -291,6 +388,8 @@ public class Solution
 
     public void LeafTrack(TreeNode root, List<int> list)
     {
+        
+
 
         //872. Leaf-Similar Trees
         if (root == null) { return; }
